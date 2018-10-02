@@ -9,14 +9,14 @@ section .bss
 
 section .text
 _start:
-	mov rax, 1 ;Syscall Write
-	mov rdi, 1 ;File Descriptor (stdout)
-	mov rsi, userMsg ;Message
-	mov rdx, 18 ;Message size
+	mov rax, 1			;Syscall Write
+	mov rdi, 1			;File Descriptor (stdout)
+	mov rsi, userMsg	;Message
+	mov rdx, 18			;Message size
 	syscall
 
-	mov rax, 3 ;Syscall Read
-	mov rdi, 0 ;File Descriptor (stdin)
+	mov rax, 0			;Syscall Read
+	mov rdi, 0			;File Descriptor (stdin)
 	mov rsi, num
 	mov rdx, 8
 	syscall
