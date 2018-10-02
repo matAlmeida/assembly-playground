@@ -1,6 +1,23 @@
 #!/bin/bash
 # Created by Matheus Almeida [https://github.com/matalmeida]
-# ./assemble <Assembly File> <Output File Name>
+
+usage="\n$(basename "$0") [-h] <Assembly_File> <Output_Name>
+\n\n
+where:\n
+\t	-h	show this help text\n
+inputs:\n
+\t	<Assembly_File>	path to the assembly file\n
+\t	<Output_Name>	name of the output file"
+
+if [ $# -eq 0 ]; then
+    echo -e "No arguments supplied.\n\nRun $0 -h to see a helpful text"
+	exit 1
+fi
+
+if [ "$1" == "-h" ]; then
+  echo -e $usage
+  exit 0
+fi
 
 assembly_file=$1
 directory=$(temp=$( realpath "$assembly_file"  ) && dirname "$temp")
