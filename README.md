@@ -4,12 +4,13 @@
 
 # Usage
 
+-   You can use the script that i created `assemble.sh` or the following commands
+
 ## Linux
 
 ```sh
 $ nasm -f elf64 hello.asm -o hello.o
 $ ld -o hello hello.o
-$ chmod u+x hello
 $ ./hello
 ```
 
@@ -18,7 +19,6 @@ $ ./hello
 ```sh
 $ nasm -f macho64 hello.asm -o hello.o
 $ ld -o hello hello.o -e _start
-$ chmod u+x hello
 $ ./hello
 ```
 
