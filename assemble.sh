@@ -24,7 +24,7 @@ directory=$(temp=$( realpath "$assembly_file"  ) && dirname "$temp")
 binary=$directory/$2
 object=$directory/$2".o"
 
-echo "Assembleling $assembly_file..."
+echo "Assembling $assembly_file..."
 
 format='unknown'
 entry=''
