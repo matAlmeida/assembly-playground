@@ -24,4 +24,5 @@ $ ./hello
 
 ## Links
 
--   https://pt.wikibooks.org/wiki/Assembly_no_Linux/Exemplos_de_uso_de_syscalls
+-   Syscall Linux: http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/
+-   Syscall MacOSX: https://opensource.apple.com//source/xnu/xnu-1504.3.12/bsd/kern/syscalls.master
