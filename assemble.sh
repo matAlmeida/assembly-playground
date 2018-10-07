@@ -1,10 +1,15 @@
 #!/bin/bash
 # Created by Matheus Almeida [https://github.com/matalmeida]
 
-usage="\n$(basename "$0") [-h] <Assembly_File> <Output_Name>
+#Polyfill for MacOsX
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+usage="\n$(basename "$0") [-h | --help] <Assembly_File> <Output_Name>
 \n\n
 where:\n
-\t	-h	show this help text\n
+\t	-h, --help	show this help text\n
 inputs:\n
 \t	<Assembly_File>	path to the assembly file\n
 \t	<Output_Name>	name of the output file"
@@ -15,6 +20,11 @@ if [ $# -eq 0 ]; then
 fi
 
 if [ "$1" == "-h" ]; then
+  echo -e $usage
+  exit 0
+fi
+
+if [ "$1" == "--help" ]; then
   echo -e $usage
   exit 0
 fi
