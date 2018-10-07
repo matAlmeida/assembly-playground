@@ -43,7 +43,7 @@ if [[ "$unamestr" == 'Linux' ]]; then
    format='elf64'
 elif [[ "$unamestr" == 'Darwin' ]]; then
    format='macho64'
-   entry='-e _start'
+   entry='-e _start -macosx_version_min 10.8 -lSystem'
 fi
 
 if [ -f $binary ]; then
