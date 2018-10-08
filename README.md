@@ -27,6 +27,15 @@ $ ./hello
 -   If you are having `BUS ERROR` probrably you are using wrong `syscall` for your operational system.
 -   I created a script `convert_syscall.py` that you can convert your `syscall`.
 -   `NEED PYTHON 3.X`
+-   To make this script work you need to add a comment `;Syscall` or `;syscall` on every line you define a `syscall`
+    -   ex:
+    ```assembly
+    	mov rax, 1			;Syscall Write
+    	mov rdi, 1			;File Descriptor (stdout)
+    	mov rsi, userMsg		;Message
+    	mov rdx, 18			;Message size
+    	syscall
+    ```
 
 ```sh
 Usage:
