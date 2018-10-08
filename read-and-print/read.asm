@@ -21,18 +21,18 @@ _start:
 	mov rdx, 8
 	syscall
 
-	mov rax, 1
+	mov rax, 1			;syscall
 	mov rdi, 1
 	mov rsi, dispMsg
 	mov rdx, 14
 	syscall
 
-	mov rax, 1
+	mov rax, 1			;syscall
 	mov rdi, 1
 	mov rsi, num
 	mov rdx, 8
 	syscall
 
-	mov rax, 60
+	mov rax, 60			;Syscall Exit
 	xor rdi, rdi
 	syscall
