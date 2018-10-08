@@ -8,6 +8,8 @@ Usage:
 
 Options:
 	-h --help		Show this screen.
+	<input>			Path to the original Assembly
+	<output>		Path to the converted Assembly (Optional. Otherwise the original file will be subscribed.)
 """
 
 import os
@@ -52,23 +54,23 @@ if __name__ == '__main__':
         exit(1)
 
     if arguments['linux']:
-        output = __convert_syscall(inputFile, elf64_to_macho64)
-        if arguments['<output>'] != None:
-            outputFile = open(arguments['<output>'], 'w')
-        else:
-            outputFile = open(arguments['<input>'], 'r+')
-            outputFile.truncate(0)
-
-        outputFile = open(arguments['<input>'], 'r+')
-        outputFile.write(output)
-
-    if arguments['macosx']:
         output = __convert_syscall(inputFile, macho64_to_elf64)
         if arguments['<output>'] != None:
             outputFile = open(arguments['<output>'], 'w')
         else:
             outputFile = open(arguments['<input>'], 'r+')
             outputFile.truncate(0)
+            outputFile = open(arguments['<input>'], 'w')
 
-        outputFile = open(arguments['<input>'], 'r+')
+        outputFile.write(output)
+
+    if arguments['macosx']:
+        output = __convert_syscall(inputFile, elf64_to_macho64)
+        if arguments['<output>'] != None:
+            outputFile = open(arguments['<output>'], 'w')
+        else:
+            outputFile = open(arguments['<input>'], 'r+')
+            outputFile.truncate(0)
+            outputFile = open(arguments['<input>'], 'r+')
+
         outputFile.write(output)
