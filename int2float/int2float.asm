@@ -44,6 +44,10 @@ section .text
 
 		call _exit
 
+	; Input:
+	;		RSI - Buffer da String
+	; Output:
+	;		RAX - Inteiro gerado a partir da String
 	string_to_int:
 		movzx rax, byte[rsi]	; Pega primeiro byte da string
 		sub rax, '0'			; Transforma para "Inteiro"
@@ -62,6 +66,10 @@ section .text
 		jbe .next_digit			; Se for digito pula para o Next_Digit
 		ret						; Se não acabou os números válidos e retorna
 
+	; Input:
+	;		RAX - Dígito a ser impresso na tela
+	; Output:
+	;		Printa o Dígito na tela
 	_printRAXDigit:
 		add rax, '0'
 		mov [digit], al
@@ -72,18 +80,30 @@ section .text
 		syscall
 		ret
 
-	_print: ; rsi = Buffer, rdx = Count
+	; Input:
+	;		RSI - Buffer
+	;		RDX - Count
+	; Output:
+	;		Printa conteúdo do Buffer na tela
+	_print:
 		mov rax, SYS_WRITE
 		mov rdi, STDOUT
 		syscall
 		ret
 
-	_scan: ; rsi = Buffer, rdx = Count
+	; Input:
+	;		RSI - Buffer
+	;		RDX - Count
+	; Output:
+	;		Salva input do úsuario no Buffer
+	_scan:
 		mov rax, SYS_READ
 		mov rdi, STDIN
 		syscall
 		ret
 
+	; Output:
+	;		Finaliza a execução do programa
 	_exit:
 		mov rax, SYS_EXIT
 		xor rdi, rdi
