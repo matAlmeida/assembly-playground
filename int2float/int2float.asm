@@ -16,9 +16,10 @@ section .data
 	outputMsg:		db 'Float: '
 	outputMsgLen:	equ $ - outputMsg
 
+	digit: db 0,10
+
 section .bss
 	number:	resb 16
-	int: resb 
 
 section .text
 	global _start
@@ -60,6 +61,16 @@ section .text
 		cmp ecx, 9				; Checa se é um digito (Entre 0-9)
 		jbe .next_digit			; Se for digito pula para o Next_Digit
 		ret						; Se não acabou os números válidos e retorna
+
+	_printRAXDigit:
+		add rax, '0'
+		mov [digit], al
+		mov rax, SYS_WRITE
+		mov rdi, STDOUT
+		mov rsi, digit
+		mov rdx, 2
+		syscall
+		ret
 
 	_print: ; rsi = Buffer, rdx = Count
 		mov rax, SYS_WRITE
