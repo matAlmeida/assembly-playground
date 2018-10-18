@@ -7,7 +7,7 @@ SYS_WRITE equ 1	;Syscall
 SYS_EXIT equ 60	;Syscall
 
 section .data
-	welcomeMsg: 	db 'Converter de Int para Float'
+	welcomeMsg: 	db 'Converter de Int para Float', 10
 	welcomeMsgLen:	equ $ - welcomeMsg
 
 	inputMsg:		db 'Inteiro: '
