@@ -20,11 +20,15 @@ section .data
 
 section .bss
 	number:	resb 16
+	string: resb 16
 
 section .text
 	global _start
 
 	_start:
+		mov rax, 91
+		call _print_uInt
+
 		mov rsi, inputMsg
 		mov rdx, inputMsgLen
 		call _print
@@ -61,6 +65,18 @@ section .text
 		cmp ecx, 9				; Checa se é um digito (Entre 0-9)
 		jbe .next_digit			; Se for digito pula para o Next_Digit
 		ret						; Se não acabou os números válidos e retorna
+
+	_print_uInt:
+		mov rdi, 10
+		mov rbx, rax
+		div rdi
+		mul rdi
+		sub rbx, rax
+		div rdi
+		mov rsi, rax
+		mov rax, rbx
+		call _printRAXDigit
+		ret
 
 	_printRAXDigit:
 		add rax, '0'
