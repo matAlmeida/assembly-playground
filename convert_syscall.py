@@ -30,18 +30,20 @@ macho64_to_elf64 = {
 
 
 def __convert_syscall(inputFile, convertTable):
-    output = ""
-    with open(inputFile) as assembly:
-        for line in assembly:
-            nextLine = line
-            if (";Syscall" in line) or (";syscall" in line):
-                sysCall = line.split(
-                    ',')[-1].split('\t')[0].replace(' ', '')
-                nextLine = line.replace(sysCall, convertTable[sysCall])
+	output = ""
+	with open(inputFile) as assembly:
+		for line in assembly:
+			nextLine = line
+			if (";Syscall" in line) or (";syscall" in line):
+				if ',' in line:
+					sysCall = line.split(',')[-1].split('\t')[0].replace(' ', '')
+				else:
+					sysCall = line.split(' ')[-1].split('\t')[0].replace(' ', '')
+				nextLine = line.replace(sysCall, convertTable[sysCall])
 
-            output += nextLine
-        assembly.close()
-        return output
+			output += nextLine
+		assembly.close()
+		return output
 
 
 if __name__ == '__main__':
