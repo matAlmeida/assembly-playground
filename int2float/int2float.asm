@@ -1,3 +1,8 @@
+; FLOAT IEEE 754 (Modificado)
+;	Sinal:		1 bit
+; 	Expoente:	7 bits
+; 	Fração:		8 bits
+
 STDIN equ 0
 STDOUT equ 1
 STDERR equ 2
@@ -5,6 +10,8 @@ STDERR equ 2
 SYS_READ equ 0	;Syscall
 SYS_WRITE equ 1	;Syscall
 SYS_EXIT equ 60	;Syscall
+
+FLOAT_BIAS equ 63
 
 section .data
 	welcomeMsg: 	db 'Converter de Int para Float', 10
@@ -25,24 +32,29 @@ section .text
 	global _start
 
 	_start:
-		mov rsi, inputMsg
-		mov rdx, inputMsgLen
-		call _print
-
-		mov rsi, number
-		mov rdx, 16
-		call _scan
-		call string_to_int
-		mov rbx, rax			; Salvando retorno de string_to_int
-
-		mov rsi, outputMsg
-		mov rdx, outputMsgLen
-		call _print
-
-		mov rax, rbx
+		mov rdx, 2
+		call two_pow
 		call _printRAXDigit
 
 		call _exit
+
+	; Input:
+	;		RDX - N in 2^N
+	; Output:
+	;		RAX - 2^N
+	two_pow:
+		mov rax, 1		; Valor inicial
+		cmp rdx, 0
+		jg .pow_loop	; if (N <= 0) {
+		xor rdx, rdx	; 	return 0
+		ret				; } else {
+		.pow_loop:		; 	do {
+		shl rax, 1		; 		rax *= 2
+		dec rdx			;		n--
+		cmp rdx, 0		;
+		jg .pow_loop	; 	} while (N > 0)
+		ret				; }
+
 
 	; Input:
 	;		RSI - Buffer da String
