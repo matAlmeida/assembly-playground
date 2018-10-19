@@ -67,8 +67,8 @@ section .text
 		jbe .loop_entry			; Se for digito pula para o Loop_Entry
 		xor rax, rax			; Se não for retorna 0
 		ret
-		.next_digit:			; Salva o digito em RAX
-		lea rax, [rax*4 + 4]	; Total *= 5
+		.next_digit:			; Multiplica RAX por 10 e adiciona o proximo digito
+		lea rax, [rax*4 + rax]	; Total *= 5
 		lea rax, [rax*2 + rcx]	; Total = Total*2 + Digito
 		.loop_entry:
 		inc	rsi					; Pula para o segundo byte
