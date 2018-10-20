@@ -38,9 +38,31 @@ section .text
 		mov	rsi, expoent
 		mov rdx, 7
 		call _print
-
+		call binary_to_int
 
 		call _exit
+
+	; Input:
+	;		RSI - string com binario
+	;		RDX - tamanho da string
+	; Output:
+	;		RCX - inteiro derivado do binario
+	binary_to_int:
+		xor rcx, rcx
+		dec rdx
+		.loop_entry:
+		movzx rax, byte[rsi]
+		sub rax, '0'
+		call two_pow
+		mul rbx
+		lea rcx, [rcx + rax]
+		inc rsi
+		dec rdx
+		cmp rdx, 0
+		jge .loop_entry
+		ret
+
+
 
 	; Input:
 	;		RSI - string com notação de FLOAT IEEE 754
@@ -86,19 +108,19 @@ section .text
 		ret
 
 	; Input:
-	;		RDX - N in 2^N
+	;		RDI - N in 2^N
 	; Output:
 	;		RBX - 2^N
 	two_pow:
 		mov rbx, 1		; Valor inicial
-		cmp rdx, 0
+		cmp rdi, 0
 		jg .pow_loop	; if (N <= 0) {
 		ret				; 	return
 						; } else {
 		.pow_loop:		; 	do {
 		shl rbx, 1		; 		rbx *= 2
-		dec rdx			;		n--
-		cmp rdx, 0		;
+		dec rdi			;		n--
+		cmp rdi, 0		;
 		jg .pow_loop	; 	} while (N > 0)
 		ret				; }
 
