@@ -35,30 +35,53 @@ section .text
 		call _scan
 		call string_to_float
 
+		mov rsi, signal
+		mov rdx, 1
+		call _print
+		call binary_to_int
+		mov r15, rcx
+
 		mov	rsi, expoent
 		mov rdx, 7
 		call _print
 		call binary_to_int
+		sub rcx, [FLOAT_BIAS]
+		mov r14, rcx
+
+		mov	rsi, frac1
+		mov rdx, 4
+		call _print
+		mov rdx, 8
+		call binary_to_int
+		mov r13, rcx
+
+		mov	rsi, frac2
+		mov rdx, 4
+		call _print
+		call binary_to_int
+		lea r13, [r13 + rcx]
 
 		call _exit
 
 	; Input:
 	;		RSI - string com binario
-	;		RDX - tamanho da string
+	;		RDX - index+1 do bit mais significante
 	; Output:
 	;		RCX - inteiro derivado do binario
 	binary_to_int:
 		xor rcx, rcx
 		dec rdx
-		.loop_entry:
 		movzx rax, byte[rsi]
 		sub rax, '0'
+		.loop_entry:
 		call two_pow
 		mul rbx
+		dec rdx
 		lea rcx, [rcx + rax]
 		inc rsi
-		dec rdx
-		cmp rdx, 0
+		movzx rax, byte[rsi]
+		sub rax, '0'
+		cmp al, 9
 		jge .loop_entry
 		ret
 
