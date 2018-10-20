@@ -1,8 +1,3 @@
-; FLOAT IEEE 754 (Modificado)
-;	Sinal:		1 bit
-; 	Expoente:	7 bits
-; 	Fração:		8 bits
-
 STDIN equ 0
 STDOUT equ 1
 STDERR equ 2
@@ -14,47 +9,98 @@ SYS_EXIT equ 60	;Syscall
 FLOAT_BIAS equ 63
 
 section .data
-	welcomeMsg: 	db 'Converter de Int para Float', 10
-	welcomeMsgLen:	equ $ - welcomeMsg
-
-	inputMsg:		db 'Decimal: '
+	inputMsg:		db 'Float: '
 	inputMsgLen:	equ $ - inputMsg
 
-	outputMsg:		db 'Float: '
+	outputMsg:		db 'Decimal: '
 	outputMsgLen:	equ $ - outputMsg
 
-	digit: db 0,10
+	digit:			db 0,10
+
+	signal:			db 0
+	expoent:		times 7 db 0
+	frac1:			times 4 db 0
+	frac2:			times 4 db 0
 
 section .bss
-	number:	resb 16
+	string:		resb 16
 
 section .text
 	global _start
 
 	_start:
-		mov rdx, 2
-		call two_pow
-		call _printRAXDigit
+
+		mov rsi, string
+		mov rdx, 16
+		call _scan
+		call string_to_float
+
+		mov	rsi, expoent
+		mov rdx, 7
+		call _print
+
 
 		call _exit
 
 	; Input:
+	;		RSI - string com notação de FLOAT IEEE 754
+	; FLOAT IEEE 754 (Modificado)
+	;		Sinal:		1 bit
+	; 		Expoente:	7 bits
+	; 		Fração:		8 bits
+	; Output:
+	;		signal		- bit de sinal
+	;		expoent		- bits de expoente
+	;		frac1		- primeiros 4 bits de frac
+	;		frac2		- últimos 4 bits de frac
+	string_to_float:
+		movzx rax, byte[rsi]
+		mov [signal], rax
+
+		xor rdi, rdi
+		.loop_entry1:
+		inc rsi
+		movzx rax, byte[rsi]
+		mov [expoent + rdi], rax
+		inc rdi
+		cmp rdi, 6
+		jbe .loop_entry1
+
+		xor rdi, rdi
+		.loop_entry2:
+		inc rsi
+		movzx rax, byte[rsi]
+		mov [frac1 + rdi], rax
+		inc rdi
+		cmp rdi, 3
+		jbe .loop_entry2
+
+		xor rdi, rdi
+		.loop_entry3:
+		inc rsi
+		movzx rax, byte[rsi]
+		mov [frac2 + rdi], rax
+		inc rdi
+		cmp rdi, 3
+		jbe .loop_entry3
+		ret
+
+	; Input:
 	;		RDX - N in 2^N
 	; Output:
-	;		RAX - 2^N
+	;		RBX - 2^N
 	two_pow:
-		mov rax, 1		; Valor inicial
+		mov rbx, 1		; Valor inicial
 		cmp rdx, 0
 		jg .pow_loop	; if (N <= 0) {
-		xor rdx, rdx	; 	return 0
-		ret				; } else {
+		ret				; 	return
+						; } else {
 		.pow_loop:		; 	do {
-		shl rax, 1		; 		rax *= 2
+		shl rbx, 1		; 		rbx *= 2
 		dec rdx			;		n--
 		cmp rdx, 0		;
 		jg .pow_loop	; 	} while (N > 0)
 		ret				; }
-
 
 	; Input:
 	;		RSI - Buffer da String
