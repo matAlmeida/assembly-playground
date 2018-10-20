@@ -38,7 +38,7 @@ section .text
 		mov rsi, signal
 		mov rdx, 1
 		call _print
-		call binary_to_int
+		sub rdx, '0'
 		mov r15, rcx
 
 		mov	rsi, expoent
