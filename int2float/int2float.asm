@@ -39,14 +39,14 @@ section .text
 		mov rdx, 1
 		call _print
 		sub rdx, '0'
-		mov r15, rcx
+		mov r15, rcx			; R15 - armazena o bit de sinal
 
 		mov	rsi, expoent
 		mov rdx, 7
 		call _print
 		call binary_to_int
 		sub rcx, [FLOAT_BIAS]
-		mov r14, rcx
+		mov r14, rcx			; R14 - armazena o expoente
 
 		mov	rsi, frac1
 		mov rdx, 4
@@ -59,7 +59,7 @@ section .text
 		mov rdx, 4
 		call _print
 		call binary_to_int
-		lea r13, [r13 + rcx]
+		lea r13, [r13 + rcx]	; R13 - armazena o Fracionario
 
 		call _exit
 
