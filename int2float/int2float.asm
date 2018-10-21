@@ -8,6 +8,8 @@ SYS_EXIT equ 60	;Syscall
 
 FLOAT_BIAS equ 63
 
+STRING_TERMINATOR equ 0
+
 section .data
 	inputMsg:		db 'Float: '
 	inputMsgLen:	equ $ - inputMsg
@@ -24,11 +26,15 @@ section .data
 
 section .bss
 	string:		resb 16
+	buffer:		resb 10
 
 section .text
 	global _start
 
 	_start:
+
+		; 123
+		; 0100010111101100
 
 		mov rsi, string
 		mov rdx, 16
@@ -38,30 +44,53 @@ section .text
 		mov rsi, signal
 		mov rdx, 1
 		call _print
-		sub rdx, '0'
-		mov r15, rcx			; R15 - armazena o bit de sinal
+		sub rsi, '0'
+		mov r15, rsi			; R15 - armazena o bit de sinal
+		mov rax, r15
+		lea rsi, [buffer]
+		call int_to_string
+		mov rsi, buffer
+		mov rdx, 10
+		call _print
 
 		mov	rsi, expoent
 		mov rdx, 7
 		call _print
 		call binary_to_int
-		sub rcx, [FLOAT_BIAS]
+		sub rcx, FLOAT_BIAS
 		mov r14, rcx			; R14 - armazena o expoente
+		mov rax, r14
+		lea rsi, [buffer]
+		call int_to_string
+		mov rsi, buffer
+		mov rdx, 10
+		call _print
 
 		mov	rsi, frac1
 		mov rdx, 4
 		call _print
 		mov rdx, 8
 		call binary_to_int
-		mov r13, rcx
+		xor r13, r13
+		lea r13, [r13, rcx]
 
 		mov	rsi, frac2
 		mov rdx, 4
 		call _print
 		call binary_to_int
 		lea r13, [r13 + rcx]	; R13 - armazena o Fracionario
+		mov rax, r13
+		lea rsi, [buffer]
+		call int_to_string
+		mov rsi, buffer
+		mov rdx, 10
+		call _print
 
 		call _exit
+
+
+	convert_float_int:
+
 
 	; Input:
 	;		RSI - string com binario
@@ -72,7 +101,7 @@ section .text
 		xor rcx, rcx
 		dec rdx
 		movzx rax, byte[rsi]
-		sub rax, '0'
+		sub rax, 48
 		.loop_entry:
 		call two_pow
 		mul rbx
@@ -80,11 +109,32 @@ section .text
 		lea rcx, [rcx + rax]
 		inc rsi
 		movzx rax, byte[rsi]
-		sub rax, '0'
-		cmp al, 9
+		sub rax, 48
+		cmp rdx, 0
 		jge .loop_entry
+		.done:
 		ret
 
+	; Input:
+	; RAX = integer value to convert
+	; RSI = pointer to buffer to store the string in (must have room for at least 10 bytes)
+	; Output:
+	; RAX = pointer to the first character of the generated string
+	int_to_string:
+		add rsi,9
+		mov byte [rsi],STRING_TERMINATOR
+
+		mov rbx,10
+		.next_digit:
+		xor rdx,rdx         ; Clear rdx prior to dividing rdx:rax by rbx
+		div rbx             ; rax /= 10
+		add dl,'0'          ; Convert the remainder to ASCII
+		dec rsi             ; store characters in reverse order
+		mov [rsi],dl
+		test rax,rax
+		jnz .next_digit     ; Repeat until rax==0
+		mov rax,rsi
+		ret
 
 
 	; Input:
@@ -131,21 +181,22 @@ section .text
 		ret
 
 	; Input:
-	;		RDI - N in 2^N
+	;		RDX - N in 2^N
 	; Output:
 	;		RBX - 2^N
 	two_pow:
-		mov rbx, 1		; Valor inicial
-		cmp rdi, 0
-		jg .pow_loop	; if (N <= 0) {
-		ret				; 	return
-						; } else {
-		.pow_loop:		; 	do {
-		shl rbx, 1		; 		rbx *= 2
-		dec rdi			;		n--
-		cmp rdi, 0		;
-		jg .pow_loop	; 	} while (N > 0)
-		ret				; }
+		xor rbx, rbx
+		lea rbx, [rbx + 1]		; Valor inicial
+		cmp rdx, 0
+		jg .pow_loop			; if (N <= 0) {
+		ret						; 	return
+								; } else {
+		.pow_loop:				; 	do {
+		shl rbx, 1				; 		rbx *= 2
+		dec rdx					;		n--
+		cmp rdx, 0				;
+		jg .pow_loop			; 	} while (N > 0)
+		ret						; }
 
 	; Input:
 	;		RSI - Buffer da String
