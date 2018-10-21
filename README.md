@@ -37,17 +37,18 @@ $ ./hello
     	syscall
     ```
 
-```sh
-Usage:
-	convert_syscall -h|--help
-	convert_syscall linux <input> [<output>] # Will convert to Linux Syscall Number
-	convert_syscall macosx <input> [<output>] # Will convert to MacOSX Syscall Number
+	- usage:
+	```sh
+	Usage:
+		convert_syscall -h|--help
+		convert_syscall linux <input> [<output>] # Will convert to Linux Syscall Number
+		convert_syscall macosx <input> [<output>] # Will convert to MacOSX Syscall Number
 
-Options:
-	-h --help		Show this screen.
-	<input>			Path to the original Assembly
-	<output>		Path to the converted Assembly (Optional. Otherwise the original file will be subscribed.)
-```
+	Options:
+		-h --help		Show this screen.
+		<input>			Path to the original Assembly
+		<output>		Path to the converted Assembly (Optional. Otherwise the original file will be subscribed.)
+	```
 
 ## Links
 
