@@ -85,9 +85,24 @@ section .text
 		mov rdx, 10
 		call _print
 
+		call convert_float_int	; Int number
+		lea rsi, [buffer]
+		call int_to_string
+		mov rsi, r15
+		mov rdx, 1
+		call _print				; Printa o Sinal (+, -)
+		mov rsi, buffer
+		mov rdx, 10
+		call _print				; Printa o Número
+
 		call _exit
 
-
+	; Input:
+	;		R15 - Bit de Sinal
+	;		R14 - Expoente
+	;		R13 - Fração
+	; Output:
+	;		RAX - Número Inteiro
 	convert_float_int:
 		cmp r15, 0
 		jg .negative
@@ -131,10 +146,10 @@ section .text
 		ret
 
 	; Input:
-	; RAX = integer value to convert
-	; RSI = pointer to buffer to store the string in (must have room for at least 10 bytes)
+	; 		RAX - valor inteiro que será convertido
+	; 		RSI - buffer que vai guardar a string
 	; Output:
-	; RAX = pointer to the first character of the generated string
+	; 		RAX - primeiro char da string
 	int_to_string:
 		add rsi,9
 		mov byte [rsi],STRING_TERMINATOR
