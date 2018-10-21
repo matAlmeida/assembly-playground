@@ -57,7 +57,6 @@ section .text
 		mov rdx, 7
 		call _print
 		call binary_to_int
-		sub rcx, FLOAT_BIAS
 		mov r14, rcx			; R14 - armazena o expoente
 		mov rax, r14
 		lea rsi, [buffer]
@@ -90,7 +89,23 @@ section .text
 
 
 	convert_float_int:
-
+		cmp r15, 0
+		jg .negative
+		add r15, 43
+		jmp .exp
+		.negative:
+		add r15, 45
+		.exp:
+		sub r14, FLOAT_BIAS
+		mov r11, 1
+		shl r11, r14w		; How could i make this work?
+		.frac:
+		mov r12w, 8
+		sub r12, r14
+		shr r13, r12		; How could i make this work?
+		xor rax, rax
+		lea rax, [r13 + r11]
+		ret
 
 	; Input:
 	;		RSI - string com binario
