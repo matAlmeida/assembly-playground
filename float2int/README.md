@@ -1,3 +1,13 @@
+# Float2nt:
+
+## OBS1: Não está compilando
+
+-   Eu preciso fazer 2 shifts que dependem de um cálculo. Dai eu não posso fazer um shift passando um `registrador` como argumento, ele pede um `imédiato`.
+
+## OBS2: Não está funcionando corretamente
+
+-   Está com algum erro na conversão de binario para inteiro. No teste de mesa a lógica funciona. Não sei oque pode estar causando o erro.
+
 # Usage
 
 ```
