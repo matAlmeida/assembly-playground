@@ -1,3 +1,12 @@
+; Uso - Float2Int
+;	Ao rodar o Script voce digita na tela o Float IEEE 754 no seguinte formato:
+; FLOAT IEEE 754 (Modificado)
+;		Sinal:		1 bit
+; 		Expoente:	7 bits
+; 		Fração:		8 bits
+;
+; Ao apertar enter será printado na tela o número correspondente como um Inteiro
+
 STDIN equ 0
 STDOUT equ 1
 STDERR equ 2
@@ -36,6 +45,10 @@ section .text
 		; 123
 		; 0100010111101100
 
+		mov rsi, inputMsg
+		mov rdx, inputMsgLen
+		call _print
+
 		mov rsi, string
 		mov rdx, 16
 		call _scan
@@ -43,49 +56,27 @@ section .text
 
 		mov rsi, signal
 		mov rdx, 1
-		call _print
 		sub rsi, '0'
 		mov r15, rsi			; R15 - armazena o bit de sinal
-		mov rax, r15
-		lea rsi, [buffer]
-		call int_to_string
-		mov rsi, buffer
-		mov rdx, 10
-		call _print
 
 		mov	rsi, expoent
 		mov rdx, 7
-		call _print
 		call binary_to_int
-		mov r14, rcx			; R14 - armazena o expoente
-		mov rax, r14
-		lea rsi, [buffer]
-		call int_to_string
-		mov rsi, buffer
-		mov rdx, 10
-		call _print
+		mov r14, rcx			; R14 - armazena o Expoente
 
 		mov	rsi, frac1
-		mov rdx, 4
-		call _print
 		mov rdx, 8
 		call binary_to_int
 		xor r13, r13
-		lea r13, [r13, rcx]
+		lea r13, [r13, rcx]		; R13 - Armazena os bits mais altos de Frac
 
 		mov	rsi, frac2
 		mov rdx, 4
-		call _print
 		call binary_to_int
-		lea r13, [r13 + rcx]	; R13 - armazena o Fracionario
-		mov rax, r13
-		lea rsi, [buffer]
-		call int_to_string
-		mov rsi, buffer
-		mov rdx, 10
-		call _print
+		lea r13, [r13 + rcx]	; R13 - armazena os bits mais baixos de Frac
 
-		call convert_float_int	; Int number
+		; Printa a Saida
+		call convert_float_int
 		lea rsi, [buffer]
 		call int_to_string
 		mov rsi, r15
@@ -113,11 +104,11 @@ section .text
 		.exp:
 		sub r14, FLOAT_BIAS
 		mov r11, 1
-		shl r11, r14w		; How could i make this work?
+		shl r11, r14w		; Sintaxe não funciona, mas é necessario ser assim 🤷‍♀
 		.frac:
 		mov r12w, 8
 		sub r12, r14
-		shr r13, r12		; How could i make this work?
+		shr r13, r12		; Sintaxe não funciona, mas é necessario ser assim 🤷‍♀
 		xor rax, rax
 		lea rax, [r13 + r11]
 		ret
@@ -156,13 +147,13 @@ section .text
 
 		mov rbx,10
 		.next_digit:
-		xor rdx,rdx         ; Clear rdx prior to dividing rdx:rax by rbx
+		xor rdx,rdx         ; Limpa rdx da divisão de rax por rbx
 		div rbx             ; rax /= 10
-		add dl,'0'          ; Convert the remainder to ASCII
-		dec rsi             ; store characters in reverse order
+		add dl,'0'          ; Converte o resto da divisão pra ASCII
+		dec rsi             ; Armazena os caracteres na ordem reversa
 		mov [rsi],dl
 		test rax,rax
-		jnz .next_digit     ; Repeat until rax==0
+		jnz .next_digit     ; Repete até rax==0
 		mov rax,rsi
 		ret
 
