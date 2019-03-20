@@ -7,31 +7,31 @@ SYS_WRITE equ 1	;Syscall
 SYS_EXIT equ 60	;Syscall
 
 section .data
-	doorString1:	db '----------------------            ---------------------', 10
-	doorString2:	db '     /     /    /   /|           /     /     /    /   /', 10
-	doorString3:	db '--------------------/|            -------------------  ', 10
-	doorString4:	db '    |     |     |  | |     -------------------    |  | ', 10
-	doorString5:	db '--------------------/|     |                 |-------  ', 10
-	doorString6:	db '      |      |     | |     |                 | |   |   ', 10
-	doorString7:	db '--------------------/|  x| |                 |-------  ', 10
-	doorString8:	db '    |     |     |  | |     |                 |   |   | ', 10
-	doorString9:	db '--------------------/      |                 |-------  ', 10
-	doorString10:	db '               fcf /       |0----()----()----|  fca    ', 10
-	doorString11:	db '                  /            /                       ', 10
-	doorString12:	db '                 /    --->    /                        ', 10
-	doorString13:	db '                /            /                         ', 10
-	doorString14:	db '               /            /                          ', 10
-	doorString15:	db '              /            /                           ', 10
-	doorString16:	db '             /            /                            ', 10
-	doorString17:	db '   / \                                                 ', 10
-	doorString18:	db '  /   \                                                ', 10
-	doorString19:	db '    |                                                  ', 10
-	doorString20:	db '    |                                                  ', 10
-	doorString21:	db '  |---|                                                ', 10
-	doorString22:	db '  | 0 | ba                                             ', 10
-	doorString23:	db '  | 0 | bf                                             ', 10
-	doorString24:	db '  |---|                                                ', 10
-	doorStringLen:	equ $ - doorString1
+	doorOpening1:	db '----------------------            ---------------------', 10
+	doorOpening2:	db '     /     /    /   /|           /     /     /    /   /', 10
+	doorOpening3:	db '--------------------/|            -------------------  ', 10
+	doorOpening4:	db '    |     |     |  | |     -------------------    |  | ', 10
+	doorOpening5:	db '--------------------/|     |                 |-------  ', 10
+	doorOpening6:	db '      |      |     | |     |                 | |   |   ', 10
+	doorOpening7:	db '--------------------/|  x| |                 |-------  ', 10
+	doorOpening8:	db '    |     |     |  | |     |                 |   |   | ', 10
+	doorOpening9:	db '--------------------/      |                 |-------  ', 10
+	doorOpening10:	db '               fcf /       |0----()----()----|  fca    ', 10
+	doorOpening11:	db '                  /            /                       ', 10
+	doorOpening12:	db '                 /    --->    /                        ', 10
+	doorOpening13:	db '                /            /                         ', 10
+	doorOpening14:	db '               /            /                          ', 10
+	doorOpening15:	db '              /            /                           ', 10
+	doorOpening16:	db '             /            /                            ', 10
+	doorOpening17:	db '   / \                                                 ', 10
+	doorOpening18:	db '  /   \                                                ', 10
+	doorOpening19:	db '    |                                                  ', 10
+	doorOpening20:	db '    |                                                  ', 10
+	doorOpening21:	db '  |---|                                                ', 10
+	doorOpening22:	db '  | 0 | ba                                             ', 10
+	doorOpening23:	db '  | 0 | bf                                             ', 10
+	doorOpening24:	db '  |---|                                                ', 10
+	doorOpeningLen:	equ $ - doorOpening1
 
 section .bss
 	num: resb 8
@@ -39,8 +39,8 @@ section .bss
 section .text
 	global _start
 	_start:
-		mov rsi, doorString1	;Message
-		mov rdx, doorStringLen	;Message size
+		mov rsi, doorOpening1	;Message
+		mov rdx, doorOpeningLen	;Message size
 		call _print
 
 		call _exit
