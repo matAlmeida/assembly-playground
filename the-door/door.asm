@@ -149,10 +149,16 @@ section .data
 	doorClosed24:	db '  |---|                                                ', 10
 	doorClosedLen:	equ $ - doorClosed1
 
-	askState: db 'Digite 1 para abrir o portão e 2 para fechar', 10
+	closedState: db 'O portao esta fechado', 10
+	closedStateLen: equ $ - closedState
+
+	openedState: db 'O portao esta aberto', 10
+	openedStateLen: equ $ - openedState
+
+	askState: db 'Digite ENTER para mudar o estado do portão, 0 para sair', 10
 	askStateLen: equ $ - askState
 
-	state: db 0
+	action: db 0
 
 section .bss
 	num: resb 8
@@ -160,29 +166,57 @@ section .bss
 section .text
 	global _start
 	_start:
-		print askState, askStateLen
-		scan state, 1
-		call _chooseState
+		mov r15, 48							; O programa sempre comecara com o portao fechado (0 em r15)
+		call _runProgram
 
-		exit
+	_runProgram:
+		call _printActualState	; Imprime o estado atual do portao
+		print askState, askStateLen
+		scan action, 1
+		call _exitCondition
+	ret
+
+	_exitCondition:
+		mov r14, [action]
+		cmp r14, 48
+		je .exitProgram
+		jmp .continueProgram
+		.continueProgram:
+			call _changeState
+			call _runProgram
+		.exitProgram:
+			exit
+		ret
 
 	; Input:
 	;		r15 - estado desejado
 	;		r14 - 1 (em ascii)
 	; Output:
 	;		Estado de transicao do portao e estado final
-	_chooseState:
-		mov r15, [state]											; estado é passado para r15
-		mov r14, 49														; num 1(ascii) é passado para r14
-		cmp r15, r14													; comparacao entre o estado passado e 1
-		je .openDoor													; se o estado passado for 1, abre o portao
-		jmp .closeDoor												; se nao for, fecha o portao
+	_changeState:
+		cmp r15, 48														; se o estado atual eh fechado
+		je .openDoor													; se o estado for fechado, abre o portao
+		jmp .closeDoor												; se nao for, abre o portao
 		.openDoor:														; abertura
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
+			mov r15, 49													; apos abrir o portao, o estado eh mudado
 			ret
 		.closeDoor:														; fechamento
 			print doorClosing1, doorClosingLen
 			print doorClosed1, doorClosedLen
+			mov r15, 48													; apos abrir o portao, o estado eh mudado
+			ret
+		ret
+
+	_printActualState:
+		cmp r15, 48
+		je .printClosedState
+		jmp .printOpenedState
+		.printClosedState:
+			print closedState, closedStateLen		; Printa que o portao esta fechado
+			ret
+		.printOpenedState:
+			print openedState, openedStateLen		; Printa que o portao esta aberto
 			ret
 		ret
