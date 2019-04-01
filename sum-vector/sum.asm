@@ -37,7 +37,7 @@ SYS_EXIT equ 60	;Syscall
 %macro scan 2
 
     mov rax, SYS_READ   ; systemcall for read
-    mov rdi, STDIN     ; file handle 1 is stdout
+    mov rdi, STDIN      ; file handle 1 is stdout
     mov rsi, %1         ; address of string to output
     mov rdx, %2         ; number of bytes
     syscall
@@ -48,11 +48,13 @@ section .data
     teste:      db 'OMG', 10
     testeLen:   equ $ - teste
 
-section .bss
-	num: resb 8
+    fibArray:   db 1, 1, 2, 3, 5, 8, 13, 21
 
 section .text
 	global _start
 	_start:
 		print teste, testeLen
         exit
+
+    _sumArray:
+        mov rax, fibArray
