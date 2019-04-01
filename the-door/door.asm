@@ -45,15 +45,15 @@ SYS_EXIT equ 60	;Syscall
 %endmacro
 
 section .data
-	doorOpening1:	  db '----------------------            ---------------------', 10
-	doorOpening2:	  db '     /     /    /   /|           /     /     /    /   /', 10
-	doorOpening3:	  db '--------------------/|            -------------------  ', 10
-	doorOpening4:	  db '    |     |     |  | |     -------------------    |  | ', 10
-	doorOpening5:	  db '--------------------/|     |                 |-------  ', 10
-	doorOpening6:	  db '      |      |     | |     |                 | |   |   ', 10
-	doorOpening7:	  db '--------------------/|  x| |                 |-------  ', 10
-	doorOpening8:	  db '    |     |     |  | |     |                 |   |   | ', 10
-	doorOpening9:	  db '--------------------/      |                 |-------  ', 10
+	doorOpening1:	db '----------------------            ---------------------', 10
+	doorOpening2:	db '     /     /    /   /|           /     /     /    /   /', 10
+	doorOpening3:	db '--------------------/|            -------------------  ', 10
+	doorOpening4:	db '    |     |     |  | |     -------------------    |  | ', 10
+	doorOpening5:	db '--------------------/|     |                 |-------  ', 10
+	doorOpening6:	db '      |      |     | |     |                 | |   |   ', 10
+	doorOpening7:	db '--------------------/|  x| |                 |-------  ', 10
+	doorOpening8:	db '    |     |     |  | |     |                 |   |   | ', 10
+	doorOpening9:	db '--------------------/      |                 |-------  ', 10
 	doorOpening10:	db '               fcf /       |0----()----()----|  fca    ', 10
 	doorOpening11:	db '                  /            /                       ', 10
 	doorOpening12:	db '                 /    --->    /                        ', 10
@@ -97,15 +97,15 @@ section .data
 	doorOpened24:	db '  |---|                                                ', 10
 	doorOpenedLen:	equ $ - doorOpened1
 
-	doorClosing1:	  db '----------------------            ---------------------', 10
-	doorClosing2:	  db '     /     /    /   /|           /     /     /    /   /', 10
-	doorClosing3:	  db '--------------------/|            -------------------  ', 10
-	doorClosing4:	  db '    |     |     |  | |     -------------------    |  | ', 10
-	doorClosing5:	  db '--------------------/|     |                 |-------  ', 10
-	doorClosing6:	  db '      |      |     | |     |                 | |   |   ', 10
-	doorClosing7:	  db '--------------------/|  x| |                 |-------  ', 10
-	doorClosing8:	  db '    |     |     |  | |     |                 |   |   | ', 10
-	doorClosing9:	  db '--------------------/      |                 |-------  ', 10
+	doorClosing1:	db '----------------------            ---------------------', 10
+	doorClosing2:	db '     /     /    /   /|           /     /     /    /   /', 10
+	doorClosing3:	db '--------------------/|            -------------------  ', 10
+	doorClosing4:	db '    |     |     |  | |     -------------------    |  | ', 10
+	doorClosing5:	db '--------------------/|     |                 |-------  ', 10
+	doorClosing6:	db '      |      |     | |     |                 | |   |   ', 10
+	doorClosing7:	db '--------------------/|  x| |                 |-------  ', 10
+	doorClosing8:	db '    |     |     |  | |     |                 |   |   | ', 10
+	doorClosing9:	db '--------------------/      |                 |-------  ', 10
 	doorClosing10:	db '               fcf /       |0----()----()----|  fca    ', 10
 	doorClosing11:	db '                  /            /                       ', 10
 	doorClosing12:	db '                 /    <---    /                        ', 10
