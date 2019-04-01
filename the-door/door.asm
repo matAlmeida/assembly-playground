@@ -194,18 +194,18 @@ section .text
 	; Output:
 	;		Estado de transicao do portao e estado final
 	_changeState:
-		cmp r15, 48														; se o estado atual eh fechado
-		je .openDoor													; se o estado for fechado, abre o portao
-		jmp .closeDoor												; se nao for, abre o portao
-		.openDoor:														; abertura
+		cmp r15, 48								; se o estado atual eh fechado
+		je .openDoor							; se o estado for fechado, abre o portao
+		jmp .closeDoor							; se nao for, abre o portao
+		.openDoor:								; abertura
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
-			mov r15, 49													; apos abrir o portao, o estado eh mudado
+			mov r15, 49							; apos abrir o portao, o estado eh mudado
 			ret
-		.closeDoor:														; fechamento
+		.closeDoor:								; fechamento
 			print doorClosing1, doorClosingLen
 			print doorClosed1, doorClosedLen
-			mov r15, 48													; apos abrir o portao, o estado eh mudado
+			mov r15, 48							; apos abrir o portao, o estado eh mudado
 			ret
 		ret
 
@@ -214,9 +214,9 @@ section .text
 		je .printClosedState
 		jmp .printOpenedState
 		.printClosedState:
-			print closedState, closedStateLen		; Printa que o portao esta fechado
+			print closedState, closedStateLen	; Printa que o portao esta fechado
 			ret
 		.printOpenedState:
-			print openedState, openedStateLen		; Printa que o portao esta aberto
+			print openedState, openedStateLen	; Printa que o portao esta aberto
 			ret
 		ret
