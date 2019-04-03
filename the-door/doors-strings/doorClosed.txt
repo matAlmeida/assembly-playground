@@ -1,0 +1,24 @@
+doorClosed1:	db '---------------------            -------------------------', 10
+doorClosed2:	db '    /     /    /   /|           /     /      /      /    /', 10
+doorClosed3:	db '-------------------/|            ----------------------   ', 10
+doorClosed4:	db '   |    |     |    |--------------------|    |    |    |  ', 10
+doorClosed5:	db '-------------------|                    |--------------   ', 10
+doorClosed6:	db '     |     |     | |                    |     |    |      ', 10
+doorClosed7:	db '-----------------x||                    |--------------   ', 10
+doorClosed8:	db '   |    |     |    |                    |    |    |    |  ', 10
+doorClosed9:	db '-------------------|                    |--------------   ', 10
+doorClosed10:	db '             fcf  /|0-----()-----()-----| fca             ', 10
+doorClosed11:	db '                 /            /                           ', 10
+doorClosed12:	db '                /            /                            ', 10
+doorClosed13:	db '               /            /                             ', 10
+doorClosed14:	db '              /            /                              ', 10
+doorClosed15:	db '             /            /                               ', 10
+doorClosed16:	db '            /            /                                ', 10
+doorClosed17:	db '    / \                                                   ', 10
+doorClosed18:	db '   /   \                                                  ', 10
+doorClosed19:	db '     |                                                    ', 10
+doorClosed20:	db '     |                                                    ', 10
+doorClosed21:	db '   |---|                                                  ', 10
+doorClosed22:	db '   | 0 | ba                                               ', 10
+doorClosed23:	db '   | 0 | bf                                               ', 10
+doorClosed24:	db '   |---|                                                  ', 10
