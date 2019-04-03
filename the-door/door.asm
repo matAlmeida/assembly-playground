@@ -74,15 +74,15 @@ section .data
 	doorOpened1:	db '----------------------            ---------------------', 10
 	doorOpened2:	db '     /     /    /   /|           /     /     /    /   /', 10
 	doorOpened3:	db '--------------------/|            -------------------  ', 10
-	doorOpened4:	db '    |     |     |  | |     -------------------    |  | ', 10
-	doorOpened5:	db '--------------------/|     |                 |-------  ', 10
-	doorOpened6:	db '      |      |     | |     |                 | |   |   ', 10
-	doorOpened7:	db '--------------------/|  x| |                 |-------  ', 10
-	doorOpened8:	db '    |     |     |  | |     |                 |   |   | ', 10
-	doorOpened9:	db '--------------------/      |                 |-------  ', 10
-	doorOpened10:	db '               fcf /       |0----()----()----|  fca    ', 10
+	doorOpened4:	db '    |     |     |  | |            ------------------- |', 10
+	doorOpened5:	db '--------------------/|            |                 |-|', 10
+	doorOpened6:	db '      |      |     | |            |                 | |', 10
+	doorOpened7:	db '--------------------/|         x| |                 |-|', 10
+	doorOpened8:	db '    |     |     |  | |            |                 | |', 10
+	doorOpened9:	db '--------------------/             |                 |-|', 10
+	doorOpened10:	db '               fcf /              |0----()----()----| |', 10
 	doorOpened11:	db '                  /            /                       ', 10
-	doorOpened12:	db '                 /    --->    /                        ', 10
+	doorOpened12:	db '                 /            /                        ', 10
 	doorOpened13:	db '                /            /                         ', 10
 	doorOpened14:	db '               /            /                          ', 10
 	doorOpened15:	db '              /            /                           ', 10
@@ -97,15 +97,15 @@ section .data
 	doorOpened24:	db '  |---|                                                ', 10
 	doorOpenedLen:	equ $ - doorOpened1
 
-	doorClosing1:	db '----------------------            ---------------------', 10
-	doorClosing2:	db '     /     /    /   /|           /     /     /    /   /', 10
-	doorClosing3:	db '--------------------/|            -------------------  ', 10
-	doorClosing4:	db '    |     |     |  | |     -------------------    |  | ', 10
-	doorClosing5:	db '--------------------/|     |                 |-------  ', 10
-	doorClosing6:	db '      |      |     | |     |                 | |   |   ', 10
-	doorClosing7:	db '--------------------/|  x| |                 |-------  ', 10
-	doorClosing8:	db '    |     |     |  | |     |                 |   |   | ', 10
-	doorClosing9:	db '--------------------/      |                 |-------  ', 10
+	doorClosing1:		db '----------------------            ---------------------', 10
+	doorClosing2:		db '     /     /    /   /|           /     /     /    /   /', 10
+	doorClosing3:		db '--------------------/|            -------------------  ', 10
+	doorClosing4:		db '    |     |     |  | |     -------------------    |  | ', 10
+	doorClosing5:		db '--------------------/|     |                 |-------  ', 10
+	doorClosing6:		db '      |      |     | |     |                 | |   |   ', 10
+	doorClosing7:		db '--------------------/|  x| |                 |-------  ', 10
+	doorClosing8:		db '    |     |     |  | |     |                 |   |   | ', 10
+	doorClosing9:		db '--------------------/      |                 |-------  ', 10
 	doorClosing10:	db '               fcf /       |0----()----()----|  fca    ', 10
 	doorClosing11:	db '                  /            /                       ', 10
 	doorClosing12:	db '                 /    <---    /                        ', 10
@@ -123,30 +123,30 @@ section .data
 	doorClosing24:	db '  |---|                                                ', 10
 	doorClosingLen:	equ $ - doorClosing1
 
-	doorClosed1:	db '----------------------            ---------------------', 10
-	doorClosed2:	db '     /     /    /   /|           /     /     /    /   /', 10
-	doorClosed3:	db '--------------------/|            -------------------  ', 10
-	doorClosed4:	db '    |     |     |  | |     -------------------    |  | ', 10
-	doorClosed5:	db '--------------------/|     |                 |-------  ', 10
-	doorClosed6:	db '      |      |     | |     |                 | |   |   ', 10
-	doorClosed7:	db '--------------------/|  x| |                 |-------  ', 10
-	doorClosed8:	db '    |     |     |  | |     |                 |   |   | ', 10
-	doorClosed9:	db '--------------------/      |                 |-------  ', 10
-	doorClosed10:	db '               fcf /       |0----()----()----|  fca    ', 10
-	doorClosed11:	db '                  /            /                       ', 10
-	doorClosed12:	db '                 /    <---    /                        ', 10
-	doorClosed13:	db '                /            /                         ', 10
-	doorClosed14:	db '               /            /                          ', 10
-	doorClosed15:	db '              /            /                           ', 10
-	doorClosed16:	db '             /            /                            ', 10
-	doorClosed17:	db '   / \                                                 ', 10
-	doorClosed18:	db '  /   \                                                ', 10
-	doorClosed19:	db '    |                                                  ', 10
-	doorClosed20:	db '    |                                                  ', 10
-	doorClosed21:	db '  |---|                                                ', 10
-	doorClosed22:	db '  | 0 | ba                                             ', 10
-	doorClosed23:	db '  | 0 | bf                                             ', 10
-	doorClosed24:	db '  |---|                                                ', 10
+	doorClosed1:	db '---------------------            -------------------------', 10
+	doorClosed2:	db '    /     /    /   /|           /     /      /      /    /', 10
+	doorClosed3:	db '-------------------/|            ----------------------   ', 10
+	doorClosed4:	db '   |    |     |    |--------------------|    |    |    |  ', 10
+	doorClosed5:	db '-------------------|                    |--------------   ', 10
+	doorClosed6:	db '     |     |     | |                    |     |    |      ', 10
+	doorClosed7:	db '-----------------x||                    |--------------   ', 10
+	doorClosed8:	db '   |    |     |    |                    |    |    |    |  ', 10
+	doorClosed9:	db '-------------------|                    |--------------   ', 10
+	doorClosed10:	db '             fcf  /|0-----()-----()-----| fca             ', 10
+	doorClosed11:	db '                 /            /                           ', 10
+	doorClosed12:	db '                /            /                            ', 10
+	doorClosed13:	db '               /            /                             ', 10
+	doorClosed14:	db '              /            /                              ', 10
+	doorClosed15:	db '             /            /                               ', 10
+	doorClosed16:	db '            /            /                                ', 10
+	doorClosed17:	db '    / \                                                   ', 10
+	doorClosed18:	db '   /   \                                                  ', 10
+	doorClosed19:	db '     |                                                    ', 10
+	doorClosed20:	db '     |                                                    ', 10
+	doorClosed21:	db '   |---|                                                  ', 10
+	doorClosed22:	db '   | 0 | ba                                               ', 10
+	doorClosed23:	db '   | 0 | bf                                               ', 10
+	doorClosed24:	db '   |---|                                                  ', 10
 	doorClosedLen:	equ $ - doorClosed1
 
 	closedState: db 'O portao esta fechado', 10
@@ -157,6 +157,9 @@ section .data
 
 	askState: db 'Digite ENTER para mudar o estado do portão, 0 para sair', 10
 	askStateLen: equ $ - askState
+
+	askEmerency: db 'O portão está fechando, entre com 0 para cancelar a ação. Se deseja continuar aperte ENTER', 10
+	askEmerencyLen: equ $ - askEmerency
 
 	action: db 0
 
@@ -188,6 +191,20 @@ section .text
 			exit
 		ret
 
+	_emergencyButton:
+		print askEmerency, askEmerencyLen
+		scan action, 1
+		mov r13, [action]
+		cmp r13, 48
+		je .openDoor
+		.openDoor:
+			print doorOpening1, doorOpeningLen
+			print doorOpened1, doorOpenedLen
+			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
+			ret
+		ret
+
+
 	; Input:
 	;		r15 - estado desejado
 	;		r14 - 1 (em ascii)
@@ -200,10 +217,11 @@ section .text
 		.openDoor:								; abertura
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
-			mov r15, 49							; apos abrir o portao, o estado eh mudado
+			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
 			ret
 		.closeDoor:								; fechamento
 			print doorClosing1, doorClosingLen
+			call _emergencyButton
 			print doorClosed1, doorClosedLen
 			mov r15, 48							; apos abrir o portao, o estado eh mudado
 			ret
