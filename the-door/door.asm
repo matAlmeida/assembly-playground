@@ -149,6 +149,14 @@ section .data
 	doorClosed24:	db '   |---|                                                  ', 10
 	doorClosedLen:	equ $ - doorClosed1
 
+	menu1: db '********** MENU ***********', 10
+	menu2: db '* 0) Sair do programa		 *', 10
+	menu3: db '* 1) Abrir portão		 		 *', 10
+	menu4: db '* 2) Fechar portão  		   *', 10
+	menu5: db '* 3) Botão de Emergência  *', 10
+	menu6: db '***************************', 10
+	menuLen: equ $ - menu1
+
 	closedState: db 'O portao esta fechado', 10
 	closedStateLen: equ $ - closedState
 
