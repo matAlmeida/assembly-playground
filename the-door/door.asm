@@ -150,9 +150,9 @@ section .data
 	doorClosedLen:	equ $ - doorClosed1
 
 	menu1: db '********** MENU ***********', 10
-	menu2: db '* 0) Sair do programa		 *', 10
-	menu3: db '* 1) Abrir portão		 		 *', 10
-	menu4: db '* 2) Fechar portão  		   *', 10
+	menu2: db '* 0) Sair do programa     *', 10
+	menu3: db '* 1) Abrir portão         *', 10
+	menu4: db '* 2) Fechar portão        *', 10
 	menu5: db '* 3) Botão de Emergência  *', 10
 	menu6: db '***************************', 10
 	menuLen: equ $ - menu1
@@ -182,7 +182,7 @@ section .text
 
 	_runProgram:
 		call _printActualState	; Imprime o estado atual do portao
-		print askState, askStateLen
+		print menu1, menuLen
 		scan action, 1
 		call _exitCondition
 	ret
@@ -200,10 +200,10 @@ section .text
 		ret
 
 	_emergencyButton:
-		print askEmerency, askEmerencyLen
+		print menu1, menuLen
 		scan action, 1
 		mov r13, [action]
-		cmp r13, 48
+		cmp r13, 51
 		je .openDoor
 		.openDoor:
 			print doorOpening1, doorOpeningLen
