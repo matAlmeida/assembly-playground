@@ -157,17 +157,14 @@ section .data
 	menu6: db '***************************', 10
 	menuLen: equ $ - menu1
 
+  warningMessage: db 'Você não pode realizar esta ação, pois: ', 10
+  warningMessageLen: equ $ - warningMessage
+
 	closedState: db 'O portao esta fechado', 10
 	closedStateLen: equ $ - closedState
 
 	openedState: db 'O portao esta aberto', 10
 	openedStateLen: equ $ - openedState
-
-	askState: db 'Digite ENTER para mudar o estado do portão, 0 para sair', 10
-	askStateLen: equ $ - askState
-
-	askEmerency: db 'O portão está fechando, entre com 0 para cancelar a ação. Se deseja continuar aperte ENTER', 10
-	askEmerencyLen: equ $ - askEmerency
 
 	action: db 0
 
@@ -184,15 +181,20 @@ section .text
 	_runProgram:
 		call _printActualState	; Imprime o estado atual do portao
 		print menu1, menuLen
-		scan action, 2
 		call _exitCondition
 	ret
 
 	_exitCondition:
+		scan action, 2
 		movzx r14, byte[action]
 		cmp r14, 48
 		je .exitProgram
+    cmp r14, 51
+    je .warningMessage
 		jmp .continueProgram
+    .warningMessage:
+      call _actionWarning
+			call _runProgram
 		.continueProgram:
 			call _changeState
 			call _runProgram
@@ -204,10 +206,17 @@ section .text
 		print menu1, menuLen
 		scan action, 2
 		movzx r13, byte[action]
+		cmp r13, 49
+    je .warningMessage
 		cmp r13, 51
 		je .openDoor
     cmp r13, 50
     je .exitEmergency
+		cmp r13, 48
+		je .exit
+    .warningMessage:
+      call _actionWarning
+			ret
 		.openDoor:
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
@@ -215,7 +224,11 @@ section .text
 			ret
     .exitEmergency:
 			print doorClosed1, doorClosedLen
+			mov r15, 48
       ret
+		.exit:
+			exit
+			ret
 		ret
 
 
@@ -227,26 +240,34 @@ section .text
 	_changeState:
 		cmp r14, 49								; se o estado pedido eh abrindo
 		je .openDoor							; se o estado for fechado, abre o portao
-    cmp r14, 50
-		je .closeDoor						; se nao for, abre o portao
+    cmp r14, 50               ; se o estado pedido eh abrindo
+		je .closeDoor						  ; se nao for, abre o portao
+    call _actionWarning
 		.openDoor:								; abertura
-      ; cmp r15, 50             ; se o estado atual eh aberto
-      ; je _printActualState
+      cmp r15, 50
+      je _actionWarning
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
 			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
 			ret
 		.closeDoor:								; fechamento
+      cmp r15, 48
+      je _actionWarning
 			print doorClosing1, doorClosingLen
 			call _emergencyButton
-			mov r15, 48							; apos abrir o portao, o estado eh mudado
 			ret
 		ret
 
+
+	; Input:
+	;		r15 - estado atual do portão
+	; Output:
+	;		Imprime na tela o estado atual do portão
 	_printActualState:
 		cmp r15, 48
 		je .printClosedState
-		jmp .printOpenedState
+		cmp r15, 50
+		je .printOpenedState
 		.printClosedState:
 			print closedState, closedStateLen	; Printa que o portao esta fechado
 			ret
@@ -254,3 +275,7 @@ section .text
 			print openedState, openedStateLen	; Printa que o portao esta aberto
 			ret
 		ret
+
+  _actionWarning:
+    print warningMessage, warningMessageLen
+    ret
