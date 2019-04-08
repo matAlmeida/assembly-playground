@@ -177,18 +177,19 @@ section .bss
 section .text
 	global _start
 	_start:
+    ; r15 = estado do portão
 		mov r15, 48							; O programa sempre comecara com o portao fechado (0 em r15)
 		call _runProgram
 
 	_runProgram:
 		call _printActualState	; Imprime o estado atual do portao
 		print menu1, menuLen
-		scan action, 1
+		scan action, 2
 		call _exitCondition
 	ret
 
 	_exitCondition:
-		mov r14, [action]
+		movzx r14, byte[action]
 		cmp r14, 48
 		je .exitProgram
 		jmp .continueProgram
@@ -201,28 +202,36 @@ section .text
 
 	_emergencyButton:
 		print menu1, menuLen
-		scan action, 1
-		mov r13, [action]
+		scan action, 2
+		movzx r13, byte[action]
 		cmp r13, 51
 		je .openDoor
+    cmp r13, 50
+    je .exitEmergency
 		.openDoor:
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
 			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
 			ret
+    .exitEmergency:
+			print doorClosed1, doorClosedLen
+      ret
 		ret
 
 
 	; Input:
-	;		r15 - estado desejado
+	;		r15 - estado atual do portão
 	;		r14 - 1 (em ascii)
 	; Output:
 	;		Estado de transicao do portao e estado final
 	_changeState:
-		cmp r15, 48								; se o estado atual eh fechado
+		cmp r14, 49								; se o estado pedido eh abrindo
 		je .openDoor							; se o estado for fechado, abre o portao
-		jmp .closeDoor							; se nao for, abre o portao
+    cmp r14, 50
+		je .closeDoor						; se nao for, abre o portao
 		.openDoor:								; abertura
+      ; cmp r15, 50             ; se o estado atual eh aberto
+      ; je _printActualState
 			print doorOpening1, doorOpeningLen
 			print doorOpened1, doorOpenedLen
 			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
@@ -230,7 +239,6 @@ section .text
 		.closeDoor:								; fechamento
 			print doorClosing1, doorClosingLen
 			call _emergencyButton
-			print doorClosed1, doorClosedLen
 			mov r15, 48							; apos abrir o portao, o estado eh mudado
 			ret
 		ret
