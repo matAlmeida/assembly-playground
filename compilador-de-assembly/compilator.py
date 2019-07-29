@@ -23,9 +23,7 @@ with open(filename) as f:
         section = re.search('^section \..+', line)
         variable = re.search('^\s*\w+:\s*.+\n', line)
         constant = re.search('(.*)(equ)\s([0-9]*)', line)
-        macroBeginning = re.search('%macro', line)
-        macroName = re.search('(?<=%macro\s)[a-z]*', line)
-        macroArgsNumber = re.search('(?<=%macro\s)(?:[a-z]*\s)([0-9]*)', line)
+        macroBeginning = re.search('(%macro)\s([a-z]*)\s([0-9]*)', line)
         macroEnding = re.search('(%endmacro)', line)
         if label != None:
             labelString = label.string
@@ -45,12 +43,12 @@ with open(filename) as f:
         if variable != None:
             print('<VARIABLE>', variable.group(0)[:-1])
         if constant != None:
-            print('<CONSTANT>', constant.group(0))
+            print('<CONSTANT_NAME>', constant.group(1))
+            print('<CONSTANT_ATTRIBUTION>', constant.group(2))
+            print('<CONSTANT_VALUE>', constant.group(3))
         if macroBeginning != None:
-            print('<MACRO_BEGINNING>', macroBeginning.group(0))
-        if macroName != None:
-            print('<MACRO_NAME>', macroName.group(0))
-        if macroArgsNumber != None:
-            print('<MACRO_ARGS_NUMBER>', macroArgsNumber.group(1))
+            print('<MACRO_BEGINNING>', macroBeginning.group(1))
+            print('<MACRO_NAME>', macroBeginning.group(2))
+            print('<MACRO_ARGS_NUMBER>', macroBeginning.group(3))
         if macroEnding != None:
             print('<MACRO_ENDING>', macroEnding.group(0))
