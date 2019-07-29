@@ -22,6 +22,9 @@ with open(filename) as f:
         registers = re.search(regCombined, line)
         section = re.search('^section \..+', line)
         variable = re.search('^\s*\w+:\s*.+\n', line)
+        constant = re.search('(.*)(equ)\s([0-9]*)', line)
+        macroBeginning = re.search('(%macro)\s([a-z]*)\s([0-9]*)', line)
+        macroEnding = re.search('(%endmacro)', line)
         if label != None:
             labelString = label.string
             labelString = labelString.replace('\n', '')
@@ -39,3 +42,9 @@ with open(filename) as f:
             print('<SECTION>', section.group(0))
         if variable != None:
             print('<VARIABLE>', variable.group(0)[:-1])
+        if constant != None:
+            print('<CONSTANT>', constant.group(0))
+        if macroBeginning != None:
+            print('<MACRO_BEGINNING>', macroBeginning.group(0))
+        if macroEnding != None:
+            print('<MACRO_ENDING>', macroEnding.group(0))
