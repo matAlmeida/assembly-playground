@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import re
 
-filename = "door.asm"
+filename = "../the-door/door.asm"
 labels = []
 inst = []
 regs = []
