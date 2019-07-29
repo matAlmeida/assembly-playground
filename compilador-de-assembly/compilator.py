@@ -22,7 +22,7 @@ with open(filename) as f:
         registers = re.search(regCombined, line)
         section = re.search('^section \..+', line)
         variable = re.search('^\s*\w+:\s*.+\n', line)
-        constant = re.search('(.*)(equ)\s([0-9]*)', line)
+        constant = re.search('(\w+\s*)(equ)\s([0-9]*)', line)
         macroBeginning = re.search('(%macro)\s([a-z]*)\s([0-9]*)', line)
         macroEnding = re.search('(%endmacro)', line)
         if label != None:
