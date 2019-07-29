@@ -45,16 +45,37 @@ SYS_EXIT equ 60	;Syscall
 %endmacro
 
 section .data
-    teste:      db 'OMG', 10
-    testeLen:   equ $ - teste
+	digit:		 db 0,10
 
-    fibArray:   db 1, 1, 2, 3, 5, 8, 13, 21
+    teste:       db 'OMG', 10
+    testeLen:    equ $ - teste
+
+    fibArray:    dd 2, 1, 2, 3
+    fibArrayLen: equ ($ - fibArray) / 4
 
 section .text
 	global _start
 	_start:
-		print teste, testeLen
+		mov rsi, fibArray
+        mov rdi, fibArrayLen - 1
+        call _printArray
         exit
 
-    _sumArray:
-        mov rax, fibArray
+
+    _printArray:
+
+
+
+    ; Input:
+	;		RAX - Dígito a ser impresso na tela
+	; Output:
+	;		Printa o Dígito na tela
+	_printRAXDigit:
+		add rax, '0'
+		mov [digit], al
+		mov rax, SYS_WRITE
+		mov rdi, STDOUT
+		mov rsi, digit
+		mov rdx, 2
+		syscall
+		ret
