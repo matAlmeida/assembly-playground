@@ -12,7 +12,7 @@ class Token():
         return "<{0}> {1}".format(self.type, self.value)
 
 
-filename = "../the-door/door.asm"
+filename = "./door.asm"
 tokens = []
 
 # Make a regex that matches if any of our regexes match.
@@ -58,10 +58,34 @@ with open(filename) as f:
 
 instruction_count = 0
 label_count = 0
-for token in tokens:
-    if token.type == "INSTRUCTION":
+program = []
+i = 0
+while i < len(tokens):
+    if tokens[i].type == "INSTRUCTION":
+        if tokens[i].value == "mov":
+            register = tokens[i+1].value
+            instStr = f'mov_{register}'.upper()
+            binary = mapper.opcode_translate[instStr]
+            if tokens[i+2].type == "IMMEDIATE":
+                binary += hex(int(tokens[i+2].value)).split('x')[-1]
+            size = int(mapper.opcode_size[instStr]) * 2
+            binary = binary.ljust(size, '0')
+            i += 3
+            print(binary)
+            continue
+        elif tokens[i].value == "call":
+            label = tokens[i+1].value
+            binary = mapper.opcode_translate['CALL']
+            binary += f'<ILC_{label}>'
+            size = int(mapper.opcode_size['CALL']) * 2
+            binary = binary.ljust(size, '0')
+            i += 2
+            print(binary)
+            continue
         instruction_count += 1
-    if token.type == "LABEL":
+    elif tokens[i].type == "LABEL":
         label_count += 1
+
+    i += 1
 
 print(label_count)

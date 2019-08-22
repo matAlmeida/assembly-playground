@@ -4,9 +4,9 @@ opcode_translate = {
     "MOV_RAX": 'b8',
     "MOV_RDI": 'bf',
 
-    "MOVABS_RSI": '48be',
-    "MOVZBQ_R14": '4c0fb63425',
-    "MOVZBQ_R13": '4c0fb62c25',
+    "MOV_RSI": '48be',
+    "MOV_R14": '4c0fb63425',
+    "MOV_R13": '4c0fb62c25',
 
     "CMP_R14": '4983fe',
     "CMP_R13": '4983fd',
@@ -16,7 +16,7 @@ opcode_translate = {
     "JMP": "eb",
     "XOR": "4831ff",
 
-    "CALLQ": "e8",
+    "CALL": "e8",
     "RETQ": "c3",
     "SYSCALL": "0f05"
 
@@ -29,9 +29,9 @@ opcode_size = {
     "MOV_RAX": 5,
     "MOV_RDI": 5,
 
-    "MOVABS_RSI": 10,
-    "MOVZBQ_R14": 9,
-    "MOVZBQ_R13": 9,
+    "MOV_RSI": 10,
+    "MOV_R14": 9,
+    "MOV_R13": 9,
 
     "CMP_R14": 4,
     "CMP_R13": 4,
@@ -41,7 +41,7 @@ opcode_size = {
     "JMP": 2,
     "XOR": 3,
 
-    "CALLQ": 5,
+    "CALL": 5,
     "RETQ": 1,
     "SYSCALL": 2
 
