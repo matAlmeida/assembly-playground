@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 import re
+import mapper
+
+
+class Token():
+    def __init__(self, ttype, value):
+        self.type = ttype
+        self.value = value
+
+    def __repr__(self):
+        return "<{0}> {1}".format(self.type, self.value)
+
 
 filename = "../the-door/door.asm"
+tokens = []
 
 # Make a regex that matches if any of our regexes match.
 instructions = ['je', 'jmp', 'xor', 'call', 'ret', 'syscall', 'mov', 'movzx']
@@ -18,21 +30,38 @@ with open(filename) as f:
         label = re.match('\s*(.+):\n', line)
         section = re.search('^section \.(.+)', line)
         data = re.search('^\s*\w+:\s*.+\n', line)
-        immediate = re.search('\d+', line)
+        immediate = re.search(', (\d+)', line)
         dataAddress = re.search('mov (rdx|rsi)[,\/] (\w+)', line)
 
         if data != None:
-            print('<DATA>', data.group(0)[:-1])
+            foundData = Token("DATA", data.group(0)[:-1])
+            tokens.append(foundData)
             continue
         if label != None:
-            print('<LABEL>', label.group(1))
+            foundLabel = Token("LABEL", label.group(1))
+            tokens.append(foundLabel)
         if instructions != None:
-            print('<INST>', instructions.group(0))
+            foundInstructions = Token("INSTRUCTION", instructions.group(0))
+            tokens.append(foundInstructions)
         if registers != None:
-            print('<REGS>', registers.group(0))
+            foundRegister = Token("REGISTER", registers.group(0))
+            tokens.append(foundRegister)
         if section != None:
-            print('<SECTION>', section.group(1))
+            foundSection = Token("SECTION", section.group(1))
+            tokens.append(foundSection)
         if immediate != None:
-            print('<IMMEDIATE>', immediate.group(0))
+            foundImmediate = Token("IMMEDIATE", immediate.group(1))
+            tokens.append(foundImmediate)
         if dataAddress != None:
-            print('<DATA_ADDRESS>', dataAddress.group(2))
+            foundDataAddress = Token("DATA_ADDRESS", dataAddress.group(2))
+            tokens.append(foundDataAddress)
+
+instruction_count = 0
+label_count = 0
+for token in tokens:
+    if token.type == "INSTRUCTION":
+        instruction_count += 1
+    if token.type == "LABEL":
+        label_count += 1
+
+print(label_count)

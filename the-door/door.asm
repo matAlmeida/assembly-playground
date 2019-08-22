@@ -111,8 +111,8 @@ section .data
 	menu6: db '***************************', 10
 	menuLen: equ $ - menu1
 
-  warningMessage: db 'Você não pode realizar esta ação, pois: ', 10
-  warningMessageLen: equ $ - warningMessage
+    warningMessage: db 'Você não pode realizar esta ação, pois: ', 10
+    warningMessageLen: equ $ - warningMessage
 
 	closedState: db 'O portao esta fechado', 10
 	closedStateLen: equ $ - closedState
