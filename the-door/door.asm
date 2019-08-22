@@ -1,49 +1,3 @@
-STDIN equ 0
-STDOUT equ 1
-STDERR equ 2
-
-SYS_READ equ 0	;Syscall
-SYS_WRITE equ 1	;Syscall
-SYS_EXIT equ 60	;Syscall
-
-	; Output:
-	;		Finaliza a execução do programa
-%macro exit 0
-    mov rax, SYS_EXIT   ; system call for exit
-    xor rdi, rdi        ; exit code 0
-    syscall             ; invoke operating system to exit
-%endmacro
-
-	; Input:
-	;		RSI - Buffer
-	;		RDX - Count
-	; Output:
-	;		Printa conteúdo do Buffer na tela
-%macro print 2
-
-    mov rax, SYS_WRITE  ; systemcall for write
-    mov rdi, STDOUT     ; file handle 1 is stdout
-    mov rsi, %1         ; address of string to output
-    mov rdx, %2         ; number of bytes
-    syscall
-
-%endmacro
-
-	; Input:
-	;		RSI - Buffer
-	;		RDX - Count
-	; Output:
-	;		Salva input do úsuario no Buffer
-%macro scan 2
-
-    mov rax, SYS_READ   ; systemcall for read
-    mov rdi, STDIN     ; file handle 1 is stdout
-    mov rsi, %1         ; address of string to output
-    mov rdx, %2         ; number of bytes
-    syscall
-
-%endmacro
-
 section .data
 	doorOpening1:	db '----------------------            ---------------------', 10
 	doorOpening2:	db '     /     /    /   /|           /     /     /    /   /', 10
@@ -180,12 +134,16 @@ section .text
 
 	_runProgram:
 		call _printActualState	; Imprime o estado atual do portao
-		print menu1, menuLen
+		mov rsi, menu1
+		mov rdx, menuLen
+		call _print
 		call _exitCondition
 	ret
 
 	_exitCondition:
-		scan action, 2
+		mov rsi, action
+		mov rdx, 2
+		call _scan
 		movzx r14, byte[action]
 		cmp r14, 48
 		je .exitProgram
@@ -199,12 +157,16 @@ section .text
 			call _changeState
 			call _runProgram
 		.exitProgram:
-			exit
+			call _exit
 		ret
 
 	_emergencyButton:
-		print menu1, menuLen
-		scan action, 2
+		mov rsi, menu1
+		mov rdx, menuLen
+		call _print
+		mov rsi, action
+		mov rdx, 2
+		call _scan
 		movzx r13, byte[action]
 		cmp r13, 49
     je .warningMessage
@@ -218,16 +180,22 @@ section .text
       call _actionWarning
 			ret
 		.openDoor:
-			print doorOpening1, doorOpeningLen
-			print doorOpened1, doorOpenedLen
+			mov rsi, doorOpening1
+			mov rdx, doorOpeningLen
+			call _print
+			mov rsi, doorOpened1
+			mov rdx, doorOpenedLen
+			call _print
 			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
 			ret
     .exitEmergency:
-			print doorClosed1, doorClosedLen
+			mov rsi, doorClosed1
+			mov rdx, doorClosedLen
+			call _print
 			mov r15, 48
       ret
 		.exit:
-			exit
+			call _exit
 			ret
 		ret
 
@@ -246,14 +214,20 @@ section .text
 		.openDoor:								; abertura
       cmp r15, 50
       je _actionWarning
-			print doorOpening1, doorOpeningLen
-			print doorOpened1, doorOpenedLen
+			mov rsi, doorOpening1
+			mov rdx, doorOpeningLen
+			call _print
+			mov rsi, doorOpened1
+			mov rdx, doorOpenedLen
+			call _print
 			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
 			ret
 		.closeDoor:								; fechamento
       cmp r15, 48
       je _actionWarning
-			print doorClosing1, doorClosingLen
+			mov rsi, doorClosing1
+			mov rdx, doorClosingLen
+			call _print
 			call _emergencyButton
 			ret
 		ret
@@ -269,13 +243,48 @@ section .text
 		cmp r15, 50
 		je .printOpenedState
 		.printClosedState:
-			print closedState, closedStateLen	; Printa que o portao esta fechado
+			mov rsi, closedState
+			mov rdx, closedStateLen
+			call _print
 			ret
 		.printOpenedState:
-			print openedState, openedStateLen	; Printa que o portao esta aberto
+			mov rsi, openedState
+			mov rdx, openedStateLen
+			call _print
 			ret
 		ret
 
-  _actionWarning:
-    print warningMessage, warningMessageLen
-    ret
+	; Input:
+	;		RSI - Buffer
+	;		RDX - Count
+	; Output:
+	;		Printa conteúdo do Buffer na tela
+	_print:
+		mov rax, 1
+		mov rdi, 1
+		syscall
+		ret
+
+	; Output:
+	;		Finaliza a execução do programa
+	_exit:
+		mov rax, 60   ; system call for exit
+		xor rdi, rdi        ; exit code 0
+		syscall             ; invoke operating system to exit
+
+	; Input:
+	;		RSI - Buffer
+	;		RDX - Count
+	; Output:
+	;		Salva input do úsuario no Buffer
+	_scan:
+		mov rax, 0   ; systemcall for read
+		mov rdi, 0     ; file handle 1 is stdout
+		syscall
+		ret
+
+	_actionWarning:
+		mov rsi, warningMessage
+		mov rdx, warningMessageLen
+		call _print
+		ret
