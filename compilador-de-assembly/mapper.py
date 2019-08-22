@@ -16,6 +16,7 @@ asm_dict = {
 
     "JE": "74",
     "JMP": "eb",
+    "XOR": "4831ff",
 
     "CALLQ": "e8",
     "RETQ": "c3",
