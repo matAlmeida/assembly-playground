@@ -28,6 +28,7 @@ with open(filename) as f:
         instructions = re.search(mergedInstructions, line)
         registers = re.search(mergedRegisters, line)
         label = re.match('\s*(.+):\n', line)
+        label_call = re.match('\s*(call|jmp|je) (_|\.)(\w+)\n', line)
         section = re.search('^section \.(.+)', line)
         data = re.search('^\s*\w+:\s*.+\n', line)
         immediate = re.search(', (\d+)', line)
@@ -43,6 +44,10 @@ with open(filename) as f:
         if instructions != None:
             foundInstructions = Token("INSTRUCTION", instructions.group(0))
             tokens.append(foundInstructions)
+        if label_call != None:
+            foundLabel = Token(
+                "LABEL_CALL", label_call.group(2) + label_call.group(3))
+            tokens.append(foundLabel)
         if registers != None:
             foundRegister = Token("REGISTER", registers.group(0))
             tokens.append(foundRegister)
@@ -71,16 +76,34 @@ while i < len(tokens):
             size = int(mapper.opcode_size[instStr]) * 2
             binary = binary.ljust(size, '0')
             i += 3
-            print(binary)
+            program.append(binary)
             continue
         elif tokens[i].value == "call":
             label = tokens[i+1].value
             binary = mapper.opcode_translate['CALL']
-            binary += f'<ILC_{label}>'
+            binary += f'<ILC-{label}>'
             size = int(mapper.opcode_size['CALL']) * 2
             binary = binary.ljust(size, '0')
             i += 2
-            print(binary)
+            program.append(binary)
+            continue
+        elif tokens[i].value == "je":
+            label = tokens[i+1].value
+            binary = mapper.opcode_translate['JE']
+            binary += f'<ILC-{label}>'
+            size = int(mapper.opcode_size['JE']) * 2
+            binary = binary.ljust(size, '0')
+            i += 2
+            program.append(binary)
+            continue
+        elif tokens[i].value == "jmp":
+            label = tokens[i+1].value
+            binary = mapper.opcode_translate['JMP']
+            binary += f'<ILC-{label}>'
+            size = int(mapper.opcode_size['JMP']) * 2
+            binary = binary.ljust(size, '0')
+            i += 2
+            program.append(binary)
             continue
         instruction_count += 1
     elif tokens[i].type == "LABEL":
@@ -88,4 +111,8 @@ while i < len(tokens):
 
     i += 1
 
-print(label_count)
+# for token in tokens:
+#     print(token)
+
+for line in program:
+    print(line)
