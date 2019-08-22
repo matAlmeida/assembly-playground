@@ -122,9 +122,6 @@ section .data
 
 	action: db 0
 
-section .bss
-	num: resb 8
-
 section .text
 	global _start
 	_start:
