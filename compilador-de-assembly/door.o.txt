@@ -5833,10 +5833,10 @@
                            .text:00000047 49 83 fe 30                      cmp    $0x30,%r14
                            .text:0000004b 74 1c                            je     0x00000069 <_exitCondition.exitProgram>
                            .text:0000004d 49 83 fe 33                      cmp    $0x33,%r14
-                           .text:00000051 74 02                            je     0x00000055 <_exitCondition.warningMessage>
+                           .text:00000051 74 02                            je     0x00000055 <_exitCondition.warningMessageExitCondition>
                            .text:00000053 eb 0a                            jmp    0x0000005f <_exitCondition.continueProgram>
 
-.text:00000055 <_exitCondition.warningMessage>:
+.text:00000055 <_exitCondition.warningMessageExitCondition>:
                            .text:00000055 e8 7b 01 00 00                   callq  0x000001d5 <_actionWarning>
                            .text:0000005a e8 ac ff ff ff                   callq  0x0000000b <_runProgram>
 
@@ -5857,9 +5857,9 @@
                            .text:00000092 e8 31 01 00 00                   callq  0x000001c8 <_scan>
                            .text:00000097 4c 0f b6 2c 25 00 00 00 00       movzbq 0x0,%r13
                            .text:000000a0 49 83 fd 31                      cmp    $0x31,%r13
-                           .text:000000a4 74 12                            je     0x000000b8 <_emergencyButton.warningMessage>
+                           .text:000000a4 74 12                            je     0x000000b8 <_emergencyButton.warningMessageEmergencyButton>
                            .text:000000a6 49 83 fd 33                      cmp    $0x33,%r13
-                           .text:000000aa 74 12                            je     0x000000be <_emergencyButton.openDoor>
+                           .text:000000aa 74 12                            je     0x000000be <_emergencyButton.openDoorEmergencyButton>
 
 .text:000000ac <menuLen>:
                            .text:000000ac 49 83 fd 32                      cmp    $0x32,%r13
@@ -5867,11 +5867,11 @@
                            .text:000000b2 49 83 fd 30                      cmp    $0x30,%r13
                            .text:000000b6 74 50                            je     0x00000108 <_emergencyButton.exit>
 
-.text:000000b8 <_emergencyButton.warningMessage>:
+.text:000000b8 <_emergencyButton.warningMessageEmergencyButton>:
                            .text:000000b8 e8 18 01 00 00                   callq  0x000001d5 <_actionWarning>
                            .text:000000bd c3                               retq   
 
-.text:000000be <_emergencyButton.openDoor>:
+.text:000000be <_emergencyButton.openDoorEmergencyButton>:
                            .text:000000be 48 be 00 00 00 00 00 00 00 00    movabs $0x0,%rsi
                            .text:000000c8 ba 40 05 00 00                   mov    $0x540,%edx
                            .text:000000cd e8 df 00 00 00                   callq  0x000001b1 <_print>
@@ -5895,12 +5895,12 @@
 
 .text:0000010f <_changeState>:
                            .text:0000010f 49 83 fe 31                      cmp    $0x31,%r14
-                           .text:00000113 74 0b                            je     0x00000120 <_changeState.openDoor>
+                           .text:00000113 74 0b                            je     0x00000120 <_changeState.openDoorChangeState>
                            .text:00000115 49 83 fe 32                      cmp    $0x32,%r14
-                           .text:00000119 74 3e                            je     0x00000159 <_changeState.closeDoor>
+                           .text:00000119 74 3e                            je     0x00000159 <_changeState.closeDoorChangeState>
                            .text:0000011b e8 b5 00 00 00                   callq  0x000001d5 <_actionWarning>
 
-.text:00000120 <_changeState.openDoor>:
+.text:00000120 <_changeState.openDoorChangeState>:
                            .text:00000120 49 83 ff 32                      cmp    $0x32,%r15
                            .text:00000124 0f 84 ab 00 00 00                je     0x000001d5 <_actionWarning>
                            .text:0000012a 48 be 00 00 00 00 00 00 00 00    movabs $0x0,%rsi
@@ -5912,7 +5912,7 @@
                            .text:00000152 41 bf 32 00 00 00                mov    $0x32,%r15d
                            .text:00000158 c3                               retq   
 
-.text:00000159 <_changeState.closeDoor>:
+.text:00000159 <_changeState.closeDoorChangeState>:
                            .text:00000159 49 83 ff 30                      cmp    $0x30,%r15
                            .text:0000015d 74 76                            je     0x000001d5 <_actionWarning>
                            .text:0000015f 48 be 00 00 00 00 00 00 00 00    movabs $0x0,%rsi

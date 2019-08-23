@@ -130,7 +130,7 @@ section .text
 		call _runProgram
 
 	_runProgram:
-		call _printActualState	; Imprime o estado atual do portao
+		call _printActualState
 		mov rsi, menu1
 		mov rdx, menuLen
 		call _print
@@ -145,9 +145,9 @@ section .text
 		cmp r14, 48
 		je .exitProgram
     cmp r14, 51
-    je .warningMessage
+    je .warningMessageExitCondition
 		jmp .continueProgram
-    .warningMessage:
+    .warningMessageExitCondition:
       call _actionWarning
 			call _runProgram
 		.continueProgram:
@@ -166,24 +166,24 @@ section .text
 		call _scan
 		movzx r13, byte[action]
 		cmp r13, 49
-    je .warningMessage
+    je .warningMessageEmergencyButton
 		cmp r13, 51
-		je .openDoor
+		je .openDoorEmergencyButton
     cmp r13, 50
     je .exitEmergency
 		cmp r13, 48
 		je .exit
-    .warningMessage:
+    .warningMessageEmergencyButton:
       call _actionWarning
 			ret
-		.openDoor:
+		.openDoorEmergencyButton:
 			mov rsi, doorOpening1
 			mov rdx, doorOpeningLen
 			call _print
 			mov rsi, doorOpened1
 			mov rdx, doorOpenedLen
 			call _print
-			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
+			mov r15, 50
 			ret
     .exitEmergency:
 			mov rsi, doorClosed1
@@ -203,25 +203,25 @@ section .text
 	; Output:
 	;		Estado de transicao do portao e estado final
 	_changeState:
-		cmp r14, 49								; se o estado pedido eh abrindo
-		je .openDoor							; se o estado for fechado, abre o portao
-    cmp r14, 50               ; se o estado pedido eh abrindo
-		je .closeDoor						  ; se nao for, abre o portao
+		cmp r14, 49
+		je .openDoorChangeState
+    cmp r14, 50
+		je .closeDoorChangeState
     call _actionWarning
-		.openDoor:								; abertura
-      cmp r15, 50
-      je _actionWarning
+		.openDoorChangeState:
+			cmp r15, 50
+			je _actionWarning
 			mov rsi, doorOpening1
 			mov rdx, doorOpeningLen
 			call _print
 			mov rsi, doorOpened1
 			mov rdx, doorOpenedLen
 			call _print
-			mov r15, 50							; apos abrir o portao, o estado eh mudado para aberto
+			mov r15, 50
 			ret
-		.closeDoor:								; fechamento
-      cmp r15, 48
-      je _actionWarning
+		.closeDoorChangeState:
+			cmp r15, 48
+			je _actionWarning
 			mov rsi, doorClosing1
 			mov rdx, doorClosingLen
 			call _print
@@ -265,9 +265,9 @@ section .text
 	; Output:
 	;		Finaliza a execução do programa
 	_exit:
-		mov rax, 60   ; system call for exit
-		xor rdi, rdi        ; exit code 0
-		syscall             ; invoke operating system to exit
+		mov rax, 60
+		xor rdi, rdi
+		syscall
 
 	; Input:
 	;		RSI - Buffer
@@ -275,8 +275,8 @@ section .text
 	; Output:
 	;		Salva input do úsuario no Buffer
 	_scan:
-		mov rax, 0   ; systemcall for read
-		mov rdi, 0     ; file handle 1 is stdout
+		mov rax, 0
+		mov rdi, 0
 		syscall
 		ret
 

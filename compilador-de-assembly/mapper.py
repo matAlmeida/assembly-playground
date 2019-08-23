@@ -17,7 +17,7 @@ opcode_translate = {
     "XOR": "4831ff",
 
     "CALL": "e8",
-    "RETQ": "c3",
+    "RET": "c3",
     "SYSCALL": "0f05"
 
     # Data é só converter o char pra ascii
@@ -42,7 +42,7 @@ opcode_size = {
     "XOR": 3,
 
     "CALL": 5,
-    "RETQ": 1,
+    "RET": 1,
     "SYSCALL": 2
 
     # Data é só converter o char pra ascii
