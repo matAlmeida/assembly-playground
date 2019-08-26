@@ -2,6 +2,7 @@
 import re
 import mapper
 import subprocess
+import os
 
 filename = "./door.asm"
 tokens = []
@@ -260,14 +261,19 @@ for line in program.lines:
     f.write(line["binary"])
 
 f.write(mapper.footer)
-contents = f.read()
-contents = contents.replace('\n', '')
-contents = contents.replace(' ', '')
-contents = contents.replace('\t', '')
-print(contents)
 f.close()
 
+with open('./out.dat', 'r') as f:
+    lines = f.readlines()
 
-bashCommand2 = 'xxd -r -ps out.dat object.o'
+lines = [line.replace(' ', '') for line in lines]
+lines = [line.replace('\n', '') for line in lines]
+lines = [line.replace('t', '') for line in lines]
+
+with open('./out.dat', 'w') as f:
+    f.writelines(lines)
+
+bashCommand2 = "xxd -r -ps out.dat object.o"
 process = subprocess.Popen(bashCommand2.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
+os.remove("out.dat")

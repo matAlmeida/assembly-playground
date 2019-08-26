@@ -4,5 +4,5 @@
 *.o
 .vscode
 *.out
-
+*.dat
 __pycache__
