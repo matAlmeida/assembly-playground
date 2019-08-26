@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 import re
 import mapper
+import subprocess
 
+filename = "./door.asm"
+tokens = []
 
 class Token():
     def __init__(self, ttype, value):
@@ -11,9 +14,6 @@ class Token():
     def __repr__(self):
         return "<{0}> {1}".format(self.type, self.value)
 
-
-filename = "./door.asm"
-tokens = []
 
 # Make a regex that matches if any of our regexes match.
 instructions = ['je', 'jmp', 'xor', 'call',
@@ -31,12 +31,12 @@ with open(filename) as f:
         label = re.match('\s*(.+):\.*\n', line)
         label_call = re.match('\s*(call|jmp|je) (_|\.)(\w+)\n', line)
         section = re.search('^section \.(.+)', line)
-        data = re.search('^\s*\w+:\s*.+\n', line)
+        data = re.search('^\s*\w+:\s*db\s*(.+)\n', line)
         immediate = re.search(', (\d+)', line)
         dataAddress = re.search('mov (rdx|rsi)[,\/] ([a-zA-Z]\w*)', line)
 
         if data != None:
-            foundData = Token("DATA", data.group(0)[:-1])
+            foundData = Token("DATA", data.group(1))
             tokens.append(foundData)
             continue
         if label != None:
@@ -111,9 +111,10 @@ class Program():
         self.ilc[labelName] = offset
 
 
-instruction_count = 0
 label_count = 0
+actionCalls = 0
 program = Program()
+dataSection = Program()
 i = 0
 while i < len(tokens):
     if tokens[i].type == "INSTRUCTION":
@@ -122,7 +123,7 @@ while i < len(tokens):
             instStr = f'mov_{register}'.upper()
             binary = mapper.opcode_translate[instStr]
             if tokens[i+2].type == "IMMEDIATE":
-                binary += hex(int(tokens[i+2].value)).split('x')[-1]
+                binary += int2hexstr(int(tokens[i+2].value))
                 i += 1
             size = int(mapper.opcode_size[instStr]) * 2
             binary = binary.ljust(size, '0')
@@ -144,12 +145,21 @@ while i < len(tokens):
             continue
         if tokens[i].value == "je":
             label = tokens[i+1].value
-            binary = mapper.opcode_translate['JE']
-            binary += f'<sub>'
-            size = int(mapper.opcode_size['JE']) * 2
-            i += 2
-            program.addLine(binary, 'JE', label)
-            continue
+            if label == "_actionWarning" and actionCalls == 0:
+                binary = mapper.opcode_translate['JE_WILD']
+                binary += f'<sub>'
+                size = int(mapper.opcode_size['JE_WILD']) * 2
+                i += 2
+                program.addLine(binary, 'JE_WILD', label)
+                actionCalls += 1
+                continue
+            else:
+                binary = mapper.opcode_translate['JE']
+                binary += f'<sub>'
+                size = int(mapper.opcode_size['JE']) * 2
+                i += 2
+                program.addLine(binary, 'JE', label)
+                continue
         if tokens[i].value == "jmp":
             label = tokens[i+1].value
             binary = mapper.opcode_translate['JMP']
@@ -195,6 +205,21 @@ while i < len(tokens):
 
         program.addIlc(tokens[i].value, offset)
 
+    if tokens[i].type == 'DATA':
+        toBeBreaked = tokens[i].value.replace("'", "").split(",")
+        for index, data in enumerate(toBeBreaked[0]):
+            if index == 0 and data == "0":
+                dataSection.addLine("00", "DATA")
+            else:
+                binary = hex(ord(data)).split("x")[-1]
+                dataSection.addLine(binary, "DATA")
+        try:
+            if toBeBreaked[1] != None and toBeBreaked[1] == " 10":
+                dataSection.addLine("0a", "DATA")
+        except:
+            print("")
+
+
     i += 1
 
 # for token in tokens:
@@ -203,7 +228,7 @@ while i < len(tokens):
 # print(program.ilc)
 
 for line in program.lines:
-    if line["label"] != None:
+    if line["label"] != None and line["opcode"] != "DATA":
         lineEnd = line['offset'] + mapper.opcode_size[line["opcode"]]
         labelStart = program.ilc[line["label"]]
         offset = labelStart - lineEnd
@@ -223,6 +248,26 @@ for line in program.lines:
         # print('binary: ', binary)
         # print('')
 
+f = open("./out.dat", "w")
+f.write(mapper.header)
+
+for line in dataSection.lines:
+    f.write(line["binary"])
+
+f.write(mapper.section_padding)
 
 for line in program.lines:
-    print(line["binary"])
+    f.write(line["binary"])
+
+f.write(mapper.footer)
+contents = f.read()
+contents = contents.replace('\n', '')
+contents = contents.replace(' ', '')
+contents = contents.replace('\t', '')
+print(contents)
+f.close()
+
+
+bashCommand2 = 'xxd -r -ps out.dat object.o'
+process = subprocess.Popen(bashCommand2.split(), stdout=subprocess.PIPE)
+output, error = process.communicate()

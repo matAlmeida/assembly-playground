@@ -1,13 +1,13 @@
 section .data
-	doorOpening1:	db '----------------------            ---------------------', 10
-	doorOpening2:	db '     /     /    /   /|           /     /     /    /   /', 10
-	doorOpening3:	db '--------------------/|            -------------------  ', 10
-	doorOpening4:	db '    |     |     |  | |     -------------------    |  | ', 10
-	doorOpening5:	db '--------------------/|     |                 |-------  ', 10
-	doorOpening6:	db '      |      |     | |     |                 | |   |   ', 10
-	doorOpening7:	db '--------------------/|  x| |                 |-------  ', 10
-	doorOpening8:	db '    |     |     |  | |     |                 |   |   | ', 10
-	doorOpening9:	db '--------------------/      |                 |-------  ', 10
+	doorOpening1:		db '----------------------            ---------------------', 10
+	doorOpening2:		db '     /     /    /   /|           /     /     /    /   /', 10
+	doorOpening3:		db '--------------------/|            -------------------  ', 10
+	doorOpening4:		db '    |     |     |  | |     -------------------    |  | ', 10
+	doorOpening5:		db '--------------------/|     |                 |-------  ', 10
+	doorOpening6:		db '      |      |     | |     |                 | |   |   ', 10
+	doorOpening7:		db '--------------------/|  x| |                 |-------  ', 10
+	doorOpening8:		db '    |     |     |  | |     |                 |   |   | ', 10
+	doorOpening9:		db '--------------------/      |                 |-------  ', 10
 	doorOpening10:	db '               fcf /       |0----()----()----|  fca    ', 10
 	doorOpening11:	db '                  /            /                       ', 10
 	doorOpening12:	db '                 /    --->    /                        ', 10
@@ -23,7 +23,6 @@ section .data
 	doorOpening22:	db '  | 0 | ba                                             ', 10
 	doorOpening23:	db '  | 0 | bf                                             ', 10
 	doorOpening24:	db '  |---|                                                ', 10
-	doorOpeningLen:	equ $ - doorOpening1
 
 	doorOpened1:	db '----------------------            ---------------------', 10
 	doorOpened2:	db '     /     /    /   /|           /     /     /    /   /', 10
@@ -49,7 +48,6 @@ section .data
 	doorOpened22:	db '  | 0 | ba                                             ', 10
 	doorOpened23:	db '  | 0 | bf                                             ', 10
 	doorOpened24:	db '  |---|                                                ', 10
-	doorOpenedLen:	equ $ - doorOpened1
 
 	doorClosing1:		db '----------------------            ---------------------', 10
 	doorClosing2:		db '     /     /    /   /|           /     /     /    /   /', 10
@@ -75,7 +73,6 @@ section .data
 	doorClosing22:	db '  | 0 | ba                                             ', 10
 	doorClosing23:	db '  | 0 | bf                                             ', 10
 	doorClosing24:	db '  |---|                                                ', 10
-	doorClosingLen:	equ $ - doorClosing1
 
 	doorClosed1:	db '---------------------            -------------------------', 10
 	doorClosed2:	db '    /     /    /   /|           /     /      /      /    /', 10
@@ -101,24 +98,19 @@ section .data
 	doorClosed22:	db '   | 0 | ba                                               ', 10
 	doorClosed23:	db '   | 0 | bf                                               ', 10
 	doorClosed24:	db '   |---|                                                  ', 10
-	doorClosedLen:	equ $ - doorClosed1
 
 	menu1: db '********** MENU ***********', 10
 	menu2: db '* 0) Sair do programa     *', 10
-	menu3: db '* 1) Abrir portão         *', 10
-	menu4: db '* 2) Fechar portão        *', 10
-	menu5: db '* 3) Botão de Emergência  *', 10
+	menu3: db '* 1) Abrir portao         *', 10
+	menu4: db '* 2) Fechar portao        *', 10
+	menu5: db '* 3) Botao de Emergencia  *', 10
 	menu6: db '***************************', 10
-	menuLen: equ $ - menu1
 
-    warningMessage: db 'Você não pode realizar esta ação, pois: ', 10
-    warningMessageLen: equ $ - warningMessage
+	warningMessage: db 'Voce nao pode realizar esta acao5 pois: ', 10
 
 	closedState: db 'O portao esta fechado', 10
-	closedStateLen: equ $ - closedState
 
 	openedState: db 'O portao esta aberto', 10
-	openedStateLen: equ $ - openedState
 
 	action: db 0
 
@@ -132,7 +124,7 @@ section .text
 	_runProgram:
 		call _printActualState
 		mov rsi, menu1
-		mov rdx, menuLen
+		mov rdx, 168
 		call _print
 		call _exitCondition
 	ret
@@ -159,7 +151,7 @@ section .text
 
 	_emergencyButton:
 		mov rsi, menu1
-		mov rdx, menuLen
+		mov rdx, 168
 		call _print
 		mov rsi, action
 		mov rdx, 2
@@ -178,16 +170,16 @@ section .text
 			ret
 		.openDoorEmergencyButton:
 			mov rsi, doorOpening1
-			mov rdx, doorOpeningLen
+			mov rdx, 1344
 			call _print
 			mov rsi, doorOpened1
-			mov rdx, doorOpenedLen
+			mov rdx, 1344
 			call _print
 			mov r15, 50
 			ret
     .exitEmergency:
 			mov rsi, doorClosed1
-			mov rdx, doorClosedLen
+			mov rdx, 1416
 			call _print
 			mov r15, 48
       ret
@@ -212,10 +204,10 @@ section .text
 			cmp r15, 50
 			je _actionWarning
 			mov rsi, doorOpening1
-			mov rdx, doorOpeningLen
+			mov rdx, 1344
 			call _print
 			mov rsi, doorOpened1
-			mov rdx, doorOpenedLen
+			mov rdx, 1344
 			call _print
 			mov r15, 50
 			ret
@@ -223,7 +215,7 @@ section .text
 			cmp r15, 48
 			je _actionWarning
 			mov rsi, doorClosing1
-			mov rdx, doorClosingLen
+			mov rdx, 1344
 			call _print
 			call _emergencyButton
 			ret
@@ -241,12 +233,12 @@ section .text
 		je .printOpenedState
 		.printClosedState:
 			mov rsi, closedState
-			mov rdx, closedStateLen
+			mov rdx, 22
 			call _print
 			ret
 		.printOpenedState:
 			mov rsi, openedState
-			mov rdx, openedStateLen
+			mov rdx, 21
 			call _print
 			ret
 		ret
@@ -282,6 +274,6 @@ section .text
 
 	_actionWarning:
 		mov rsi, warningMessage
-		mov rdx, warningMessageLen
+		mov rdx, 41
 		call _print
 		ret
