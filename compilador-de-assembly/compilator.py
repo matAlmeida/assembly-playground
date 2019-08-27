@@ -122,7 +122,7 @@ while i < len(tokens):
     if tokens[i].type == "INSTRUCTION":
         if tokens[i].value == "mov":
             register = tokens[i+1].value
-            instStr = f'mov_{register}'.upper()
+            instStr = 'mov_{0}'.format(register).upper()
             binary = mapper.opcode_translate[instStr]
             if tokens[i+2].type == "IMMEDIATE":
                 binary += int2hexstr(int(tokens[i+2].value))
@@ -135,7 +135,7 @@ while i < len(tokens):
             continue
         if tokens[i].value == "cmp":
             register = tokens[i+1].value
-            instStr = f'cmp_{register}'.upper()
+            instStr = 'cmp_{0}'.format(register).upper()
             binary = mapper.opcode_translate[instStr]
             if tokens[i+2].type == "IMMEDIATE":
                 binary += hex(int(tokens[i+2].value)).split('x')[-1]
@@ -149,7 +149,7 @@ while i < len(tokens):
             label = tokens[i+1].value
             if label == "_actionWarning" and actionCalls == 0:
                 binary = mapper.opcode_translate['JE_WILD']
-                binary += f'<sub>'
+                binary += '<sub>'
                 size = int(mapper.opcode_size['JE_WILD']) * 2
                 i += 2
                 program.addLine(binary, 'JE_WILD', label)
@@ -157,7 +157,7 @@ while i < len(tokens):
                 continue
             else:
                 binary = mapper.opcode_translate['JE']
-                binary += f'<sub>'
+                binary += '<sub>'
                 size = int(mapper.opcode_size['JE']) * 2
                 i += 2
                 program.addLine(binary, 'JE', label)
@@ -165,7 +165,7 @@ while i < len(tokens):
         if tokens[i].value == "jmp":
             label = tokens[i+1].value
             binary = mapper.opcode_translate['JMP']
-            binary += f'<sub>'
+            binary += '<sub>'
             size = int(mapper.opcode_size['JMP']) * 2
             i += 2
             program.addLine(binary, 'JMP', label)
@@ -180,7 +180,7 @@ while i < len(tokens):
         if tokens[i].value == "call":
             label = tokens[i+1].value
             binary = mapper.opcode_translate['CALL']
-            binary += f'<sub>'
+            binary += '<sub>'
             size = int(mapper.opcode_size['CALL']) * 2
             i += 1
             program.addLine(binary, 'CALL', label)
