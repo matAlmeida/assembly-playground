@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import re
 import mapper
 import subprocess
@@ -6,6 +6,7 @@ import os
 
 filename = "./door.asm"
 tokens = []
+
 
 class Token():
     def __init__(self, ttype, value):
@@ -219,7 +220,6 @@ while i < len(tokens):
                 dataSection.addLine("0a", "DATA")
         except:
             print("")
-
 
     i += 1
 
